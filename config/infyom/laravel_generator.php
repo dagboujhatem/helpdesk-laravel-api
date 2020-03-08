@@ -99,7 +99,7 @@ return [
         'tests'         => false,
         'datatables'    => true,
         'menu'          => [
-            'enabled'       => true,
+            'enabled'       => false,
             'menu_file'     => 'layouts/menu.blade.php',
         ],
     ],

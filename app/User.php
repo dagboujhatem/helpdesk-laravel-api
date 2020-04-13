@@ -97,7 +97,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  */
 class User extends Authenticatable
 {
-    use SoftDeletes, HasRoles;
+    use SoftDeletes, HasRoles, HasApiTokens;
 
     public $table = 'users';
 

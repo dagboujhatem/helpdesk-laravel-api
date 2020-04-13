@@ -20,6 +20,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 Route::prefix('v1')->group(function () {
-   Route::resource('admins', 'API\AdminAPIController');
+   Route::resource('users', 'API\UserAPIController');
 });
 

@@ -3,9 +3,10 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
+use Laravel\Passport\HasApiTokens;
 /**
  * @SWG\Definition(
  *      definition="User",
@@ -97,7 +98,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  */
 class User extends Authenticatable
 {
-    use SoftDeletes, HasRoles, HasApiTokens;
+    use SoftDeletes, HasRoles, HasApiTokens, Notifiable;
 
     public $table = 'users';
 

@@ -14,12 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Common routes
+Route::post('login', 'AuthController@login');
+Route::post('forgot-password', 'PasswordResetController@forgotPassword');
+Route::post('reset-password', 'PasswordResetController@resetPassword');
 
-
-Route::prefix('v1')->group(function () {
-   Route::resource('users', 'API\UserAPIController');
+// Secure routes
+Route::group(['middleware' => 'auth:api'], function()
+{
+    Route::resource('users', 'UserAPIController');
+    Route::get('users/logout', 'AuthController@logout');
 });
 

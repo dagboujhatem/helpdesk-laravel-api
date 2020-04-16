@@ -120,7 +120,6 @@ class User extends Authenticatable
         'lieu_de_travail',
         'date_d_embauche',
         'photo',
-        'role'
     ];
 
     /**
@@ -142,7 +141,6 @@ class User extends Authenticatable
         'lieu_de_travail' => 'string',
         'date_d_embauche' => 'date',
         'photo' => 'string',
-        'role' => 'string'
     ];
 
     /**

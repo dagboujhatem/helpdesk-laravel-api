@@ -22,7 +22,7 @@ Route::post('reset-password', 'PasswordResetController@resetPassword');
 // Secure routes
 Route::group(['middleware' => 'auth:api'], function()
 {
-    Route::resource('users', 'UserAPIController');
     Route::get('users/logout', 'AuthController@logout');
+    Route::resource('users', 'UserAPIController');
 });
 

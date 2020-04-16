@@ -33,7 +33,6 @@ class UsersTableSeeder extends Seeder
                 'lieu_de_travail' => 'Siége',
                 'date_d_embauche' => now(),
                 'photo' => $faker->unique()->imageUrl($width = 50, $height = 50 ,'people'),
-                'role' => '0' ,
                 ])->assignRole('Administrateur');
 
 
@@ -51,7 +50,6 @@ class UsersTableSeeder extends Seeder
                 'lieu_de_travail' => 'Siége',
                 'date_d_embauche' => now(),
                 'photo' => $faker->unique()->imageUrl($width = 50, $height = 50 ,'people'),
-                'role' => '0' ,
                 ])->assignRole('Informaticien');
 
                 // insert a default Personnel
@@ -68,7 +66,6 @@ class UsersTableSeeder extends Seeder
                 'lieu_de_travail' => 'Siége',
                 'date_d_embauche' => now(),
                 'photo' => $faker->unique()->imageUrl($width = 50, $height = 50 ,'people'),
-                'role' => '0' ,
                 ])->assignRole('Personnel');
 
                 // insert a default Fournisseur
@@ -85,7 +82,6 @@ class UsersTableSeeder extends Seeder
                 'lieu_de_travail' => 'Siége',
                 'date_d_embauche' => now(),
                 'photo' => $faker->unique()->imageUrl($width = 50, $height = 50 ,'people'),
-                'role' => '0' ,
                 ])->assignRole('Fournisseur');
 
             }else

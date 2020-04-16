@@ -112,6 +112,10 @@ class UserAPIController extends AppBaseController
 
         $user = $this->userRepository->create($input);
 
+        // assign user role
+        $role = $input['role'];
+        $user->assignRole($role);
+
         return $this->sendResponse($user->toArray(), 'User saved successfully');
     }
 

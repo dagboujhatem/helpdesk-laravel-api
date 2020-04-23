@@ -9,6 +9,7 @@ use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
 use Response;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * Class UserController
@@ -65,7 +66,7 @@ class UserAPIController extends AppBaseController
             $request->get('limit')
         );
 
-        return $this->sendResponse($users->toArray(), 'Users retrieved successfully');
+        return $this->sendResponse($users->toArray(), 'Utilisateurs récupérés avec succès.');
     }
 
     /**
@@ -109,14 +110,21 @@ class UserAPIController extends AppBaseController
     public function store(CreateUserAPIRequest $request)
     {
         $input = $request->all();
+        // crypt the password
+        $input['password'] = Hash::make($input['password']);
 
+        // upload photo
+        /*$path = $request->file('photo')->store('avatars');
+        $input['photo'] = $path;*/
+
+        // save user in database
         $user = $this->userRepository->create($input);
 
         // assign user role
         $role = $input['role'];
         $user->assignRole($role);
 
-        return $this->sendResponse($user->toArray(), 'User saved successfully');
+        return $this->sendResponse($user->toArray(), 'L\'utilisateur a été ajouté avec succès.');
     }
 
     /**
@@ -163,10 +171,10 @@ class UserAPIController extends AppBaseController
         $user = $this->userRepository->find($id);
 
         if (empty($user)) {
-            return $this->sendError('User not found');
+            return $this->sendError('Utilisateur non trouvé.');
         }
 
-        return $this->sendResponse($user->toArray(), 'User retrieved successfully');
+        return $this->sendResponse($user->toArray(), 'L\'utilisateur a été récupéré avec succès.');
     }
 
     /**
@@ -223,12 +231,15 @@ class UserAPIController extends AppBaseController
         $user = $this->userRepository->find($id);
 
         if (empty($user)) {
-            return $this->sendError('User not found');
+            return $this->sendError('Utilisateur non trouvé.');
         }
+
+        // crypt the password
+        $input['password'] = Hash::make($input['password']);
 
         $user = $this->userRepository->update($input, $id);
 
-        return $this->sendResponse($user->toArray(), 'User updated successfully');
+        return $this->sendResponse($user->toArray(), 'L\'utilisateur a été mis à jour avec succès.');
     }
 
     /**
@@ -275,11 +286,11 @@ class UserAPIController extends AppBaseController
         $user = $this->userRepository->find($id);
 
         if (empty($user)) {
-            return $this->sendError('User not found');
+            return $this->sendError('Utilisateur non trouvé.');
         }
 
         $user->delete();
 
-        return $this->sendSuccess('User deleted successfully');
+        return $this->sendSuccess('L\'utilisateur a bien été supprimé avec succès.');
     }
 }

@@ -29,10 +29,11 @@ class AuthController extends AppBaseController
             'access_token' => $token,
             ];
 
-            return $this->sendResponse($responseArray, 'User authenticated successfully.');
+            return $this->sendResponse($responseArray, 'L\'utilisateur s\'est authentifié avec succès.');
         }
         else{
-            return $this->sendError('The user credentials were incorrect.',401);
+            return $this->sendError('Ces identifiants ne correspondent pas à nos enregistrements. 
+            SVP vérifier votre e-mail ou votre mot de passe.',401);
         }
     }
 
@@ -40,7 +41,7 @@ class AuthController extends AppBaseController
     {
         $accessToken = Auth::user()->token();
         $accessToken->revoke();
-        return $this->sendSuccess('Successfully logout.');
+        return $this->sendSuccess('Déconnexion réussie.');
     }
 
 

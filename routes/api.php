@@ -26,3 +26,6 @@ Route::group(['middleware' => 'auth:api'], function()
     Route::resource('users', 'UserAPIController');
 });
 
+
+
+Route::resource('tickets', 'TicketAPIController');

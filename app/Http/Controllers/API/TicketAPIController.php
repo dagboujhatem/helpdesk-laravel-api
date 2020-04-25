@@ -2,29 +2,27 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Requests\API\CreateUserAPIRequest;
-use App\Http\Requests\API\UpdateUserAPIRequest;
-use App\User;
-use App\Repositories\UserRepository;
+use App\Http\Requests\API\CreateTicketAPIRequest;
+use App\Http\Requests\API\UpdateTicketAPIRequest;
+use App\Ticket;
+use App\Repositories\TicketRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
-use Illuminate\Support\Facades\Storage;
 use Response;
-use Illuminate\Support\Facades\Hash;
 
 /**
- * Class UserController
+ * Class TicketController
  * @package App\Http\Controllers\API
  */
 
-class UserAPIController extends AppBaseController
+class TicketAPIController extends AppBaseController
 {
-    /** @var  UserRepository */
-    private $userRepository;
+    /** @var  TicketRepository */
+    private $ticketRepository;
 
-    public function __construct(UserRepository $userRepo)
+    public function __construct(TicketRepository $ticketRepo)
     {
-        $this->userRepository = $userRepo;
+        $this->ticketRepository = $ticketRepo;
     }
 
     /**
@@ -32,10 +30,10 @@ class UserAPIController extends AppBaseController
      * @return Response
      *
      * @SWG\Get(
-     *      path="/users",
-     *      summary="Get a listing of the Users.",
-     *      tags={"User"},
-     *      description="Get all Users",
+     *      path="/tickets",
+     *      summary="Get a listing of the Tickets.",
+     *      tags={"Ticket"},
+     *      description="Get all Tickets",
      *      produces={"application/json"},
      *      @SWG\Response(
      *          response=200,
@@ -49,7 +47,7 @@ class UserAPIController extends AppBaseController
      *              @SWG\Property(
      *                  property="data",
      *                  type="array",
-     *                  @SWG\Items(ref="#/definitions/User")
+     *                  @SWG\Items(ref="#/definitions/Ticket")
      *              ),
      *              @SWG\Property(
      *                  property="message",
@@ -61,31 +59,31 @@ class UserAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $users = $this->userRepository->all(
+        $tickets = $this->ticketRepository->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
         );
 
-        return $this->sendResponse($users->toArray(), 'Utilisateurs récupérés avec succès.');
+        return $this->sendResponse($tickets->toArray(), 'Tickets retrieved successfully');
     }
 
     /**
-     * @param CreateUserAPIRequest $request
+     * @param CreateTicketAPIRequest $request
      * @return Response
      *
      * @SWG\Post(
-     *      path="/users",
-     *      summary="Store a newly created User in storage",
-     *      tags={"User"},
-     *      description="Store User",
+     *      path="/tickets",
+     *      summary="Store a newly created Ticket in storage",
+     *      tags={"Ticket"},
+     *      description="Store Ticket",
      *      produces={"application/json"},
      *      @SWG\Parameter(
      *          name="body",
      *          in="body",
-     *          description="User that should be stored",
+     *          description="Ticket that should be stored",
      *          required=false,
-     *          @SWG\Schema(ref="#/definitions/User")
+     *          @SWG\Schema(ref="#/definitions/Ticket")
      *      ),
      *      @SWG\Response(
      *          response=200,
@@ -98,7 +96,7 @@ class UserAPIController extends AppBaseController
      *              ),
      *              @SWG\Property(
      *                  property="data",
-     *                  ref="#/definitions/User"
+     *                  ref="#/definitions/Ticket"
      *              ),
      *              @SWG\Property(
      *                  property="message",
@@ -108,24 +106,13 @@ class UserAPIController extends AppBaseController
      *      )
      * )
      */
-    public function store(CreateUserAPIRequest $request)
+    public function store(CreateTicketAPIRequest $request)
     {
         $input = $request->all();
-        // crypt the password
-        $input['password'] = Hash::make($input['password']);
 
-        // upload photo
-        $path = $request->file('photo')->store('app/public/avatars');
-        $input['photo'] = Storage::url($path);
+        $ticket = $this->ticketRepository->create($input);
 
-        // save user in database
-        $user = $this->userRepository->create($input);
-
-        // assign user role
-        $role = $input['role'];
-        $user->assignRole($role);
-
-        return $this->sendResponse($user->toArray(), 'L\'utilisateur a été ajouté avec succès.');
+        return $this->sendResponse($ticket->toArray(), 'Ticket saved successfully');
     }
 
     /**
@@ -133,14 +120,14 @@ class UserAPIController extends AppBaseController
      * @return Response
      *
      * @SWG\Get(
-     *      path="/users/{id}",
-     *      summary="Display the specified User",
-     *      tags={"User"},
-     *      description="Get User",
+     *      path="/tickets/{id}",
+     *      summary="Display the specified Ticket",
+     *      tags={"Ticket"},
+     *      description="Get Ticket",
      *      produces={"application/json"},
      *      @SWG\Parameter(
      *          name="id",
-     *          description="id of User",
+     *          description="id of Ticket",
      *          type="integer",
      *          required=true,
      *          in="path"
@@ -156,7 +143,7 @@ class UserAPIController extends AppBaseController
      *              ),
      *              @SWG\Property(
      *                  property="data",
-     *                  ref="#/definitions/User"
+     *                  ref="#/definitions/Ticket"
      *              ),
      *              @SWG\Property(
      *                  property="message",
@@ -168,33 +155,30 @@ class UserAPIController extends AppBaseController
      */
     public function show($id)
     {
-        /** @var User $user */
-        $user = $this->userRepository->find($id);
+        /** @var Ticket $ticket */
+        $ticket = $this->ticketRepository->find($id);
 
-        if (empty($user)) {
-            return $this->sendError('Utilisateur non trouvé.');
+        if (empty($ticket)) {
+            return $this->sendError('Ticket not found');
         }
 
-        // get the user role
-        $user['role'] = $user->getRoleNames()[0];
-
-        return $this->sendResponse($user->toArray(), 'L\'utilisateur a été récupéré avec succès.');
+        return $this->sendResponse($ticket->toArray(), 'Ticket retrieved successfully');
     }
 
     /**
      * @param int $id
-     * @param UpdateUserAPIRequest $request
+     * @param UpdateTicketAPIRequest $request
      * @return Response
      *
      * @SWG\Put(
-     *      path="/users/{id}",
-     *      summary="Update the specified User in storage",
-     *      tags={"User"},
-     *      description="Update User",
+     *      path="/tickets/{id}",
+     *      summary="Update the specified Ticket in storage",
+     *      tags={"Ticket"},
+     *      description="Update Ticket",
      *      produces={"application/json"},
      *      @SWG\Parameter(
      *          name="id",
-     *          description="id of User",
+     *          description="id of Ticket",
      *          type="integer",
      *          required=true,
      *          in="path"
@@ -202,9 +186,9 @@ class UserAPIController extends AppBaseController
      *      @SWG\Parameter(
      *          name="body",
      *          in="body",
-     *          description="User that should be updated",
+     *          description="Ticket that should be updated",
      *          required=false,
-     *          @SWG\Schema(ref="#/definitions/User")
+     *          @SWG\Schema(ref="#/definitions/Ticket")
      *      ),
      *      @SWG\Response(
      *          response=200,
@@ -217,7 +201,7 @@ class UserAPIController extends AppBaseController
      *              ),
      *              @SWG\Property(
      *                  property="data",
-     *                  ref="#/definitions/User"
+     *                  ref="#/definitions/Ticket"
      *              ),
      *              @SWG\Property(
      *                  property="message",
@@ -227,23 +211,20 @@ class UserAPIController extends AppBaseController
      *      )
      * )
      */
-    public function update($id, UpdateUserAPIRequest $request)
+    public function update($id, UpdateTicketAPIRequest $request)
     {
         $input = $request->all();
 
-        /** @var User $user */
-        $user = $this->userRepository->find($id);
+        /** @var Ticket $ticket */
+        $ticket = $this->ticketRepository->find($id);
 
-        if (empty($user)) {
-            return $this->sendError('Utilisateur non trouvé.');
+        if (empty($ticket)) {
+            return $this->sendError('Ticket not found');
         }
 
-        // crypt the password
-        $input['password'] = Hash::make($input['password']);
+        $ticket = $this->ticketRepository->update($input, $id);
 
-        $user = $this->userRepository->update($input, $id);
-
-        return $this->sendResponse($user->toArray(), 'L\'utilisateur a été mis à jour avec succès.');
+        return $this->sendResponse($ticket->toArray(), 'Ticket updated successfully');
     }
 
     /**
@@ -251,14 +232,14 @@ class UserAPIController extends AppBaseController
      * @return Response
      *
      * @SWG\Delete(
-     *      path="/users/{id}",
-     *      summary="Remove the specified User from storage",
-     *      tags={"User"},
-     *      description="Delete User",
+     *      path="/tickets/{id}",
+     *      summary="Remove the specified Ticket from storage",
+     *      tags={"Ticket"},
+     *      description="Delete Ticket",
      *      produces={"application/json"},
      *      @SWG\Parameter(
      *          name="id",
-     *          description="id of User",
+     *          description="id of Ticket",
      *          type="integer",
      *          required=true,
      *          in="path"
@@ -286,15 +267,15 @@ class UserAPIController extends AppBaseController
      */
     public function destroy($id)
     {
-        /** @var User $user */
-        $user = $this->userRepository->find($id);
+        /** @var Ticket $ticket */
+        $ticket = $this->ticketRepository->find($id);
 
-        if (empty($user)) {
-            return $this->sendError('Utilisateur non trouvé.');
+        if (empty($ticket)) {
+            return $this->sendError('Ticket not found');
         }
 
-        $user->delete();
+        $ticket->delete();
 
-        return $this->sendSuccess('L\'utilisateur a bien été supprimé avec succès.');
+        return $this->sendSuccess('Ticket deleted successfully');
     }
 }

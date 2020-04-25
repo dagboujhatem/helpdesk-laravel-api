@@ -21,12 +21,12 @@ class UsersTableSeeder extends Seeder
 
                 // insert a default Administrateur
                 User::create([
-                'identifiant' => $faker->uuid ,
+                'identifiant' => $faker->randomNumber($nbDigits = 8, $strict = false) ,
                 'nom' => $faker->firstName,
                 'prenom' => $faker->lastName ,
                 'email' => 'admin@gmail.com' ,
                 'password' => bcrypt('password'),
-                'cin' => '12345678',
+                'cin' => $faker->randomNumber($nbDigits = 8, $strict = false) ,
                 'telephone' => $faker->e164PhoneNumber ,
                 'adresse' => $faker->streetAddress,
                 'departement' => 'Monétique',
@@ -38,28 +38,28 @@ class UsersTableSeeder extends Seeder
 
                 // insert a default Informaticien
                 User::create([
-                'identifiant' => $faker->uuid ,
+                'identifiant' => $faker->randomNumber($nbDigits = 8, $strict = false) ,
                 'nom' => $faker->firstName,
                 'prenom' => $faker->lastName ,
                 'email' => 'informaticien@gmail.com' ,
                 'password' => bcrypt('password'),
-                'cin' => '12345678',
+                'cin' => $faker->randomNumber($nbDigits = 8, $strict = false) ,
                 'telephone' => $faker->e164PhoneNumber ,
                 'adresse' => $faker->streetAddress,
                 'departement' => 'Monétique',
-                'lieu_de_travail' => 'Siége',
+                'lieu_de_travail' => 'Agence',
                 'date_d_embauche' => now(),
                 'photo' => $faker->unique()->imageUrl($width = 50, $height = 50 ,'people'),
                 ])->assignRole('Informaticien');
 
                 // insert a default Personnel
                 User::create([
-                'identifiant' => $faker->uuid ,
+                'identifiant' => $faker->randomNumber($nbDigits = 8, $strict = false) ,
                 'nom' => $faker->firstName,
                 'prenom' => $faker->lastName ,
                 'email' => 'personnel@gmail.com' ,
                 'password' => bcrypt('password'),
-                'cin' => '12345678',
+                'cin' => $faker->randomNumber($nbDigits = 8, $strict = false) ,
                 'telephone' => $faker->e164PhoneNumber ,
                 'adresse' => $faker->streetAddress,
                 'departement' => 'Monétique',
@@ -70,16 +70,16 @@ class UsersTableSeeder extends Seeder
 
                 // insert a default Fournisseur
                 User::create([
-                'identifiant' => $faker->uuid ,
+                'identifiant' => $faker->randomNumber($nbDigits = 8, $strict = false) ,
                 'nom' => $faker->firstName,
                 'prenom' => $faker->lastName ,
                 'email' => 'fournisseur@gmail.com' ,
                 'password' => bcrypt('password'),
-                'cin' => '12345678',
+                'cin' => $faker->randomNumber($nbDigits = 8, $strict = false) ,
                 'telephone' => $faker->e164PhoneNumber ,
                 'adresse' => $faker->streetAddress,
                 'departement' => 'Monétique',
-                'lieu_de_travail' => 'Siége',
+                'lieu_de_travail' => 'Agence',
                 'date_d_embauche' => now(),
                 'photo' => $faker->unique()->imageUrl($width = 50, $height = 50 ,'people'),
                 ])->assignRole('Fournisseur');

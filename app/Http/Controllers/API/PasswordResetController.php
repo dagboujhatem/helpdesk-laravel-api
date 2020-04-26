@@ -137,7 +137,6 @@ class PasswordResetController extends AppBaseController
      */
     public function resetPassword(Request $request)
     {
-        App::setLocale('en');
         // request validate
         $request->validate([
             'email' => 'required|string|email',

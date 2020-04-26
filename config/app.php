@@ -165,7 +165,7 @@ return [
         /*
          * Package Service Providers...
          */
-         Jlapp\Swaggervel\SwaggervelServiceProvider::class,
+        Appointer\Swaggervel\SwaggervelServiceProvider::class,
 
         /*
          * Application Service Providers...

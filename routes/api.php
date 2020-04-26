@@ -24,8 +24,5 @@ Route::group(['middleware' => 'auth:api'], function()
 {
     Route::get('users/logout', 'AuthController@logout');
     Route::resource('users', 'UserAPIController');
+    Route::resource('tickets', 'TicketAPIController');
 });
-
-
-
-Route::resource('tickets', 'TicketAPIController');

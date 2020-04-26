@@ -165,7 +165,6 @@ return [
         /*
          * Package Service Providers...
          */
-        Appointer\Swaggervel\SwaggervelServiceProvider::class,
 
         /*
          * Application Service Providers...

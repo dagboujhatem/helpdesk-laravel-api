@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\CreateTicketAPIRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
 use Auth;
@@ -10,7 +11,59 @@ use Carbon\Carbon;
 
 class AuthController extends AppBaseController
 {
-
+    /**
+     * @param Request $request
+     * @return Response
+     *
+     * @SWG\Post(
+     *      path="/login",
+     *      summary="User authentification",
+     *      tags={"User"},
+     *      description="User login",
+     *      produces={"application/json"},
+     *      @SWG\Parameter(
+     *          name="body",
+     *          in="body",
+     *          description="User credentials",
+     *          required=true,
+     *          @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(
+     *                  property="email",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="password",
+     *                  type="string"
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *          response=200,
+     *          description="successful operation",
+     *          @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(
+     *                  property="success",
+     *                  type="boolean"
+     *              ),
+     *                  @SWG\Property(
+     *                  property="data",
+     *                      @SWG\Property(property="role", type="string"),
+     *                      @SWG\Property(property="avatar",type="string"),
+     *                      @SWG\Property(property="token_type",type="string"),
+     *                      @SWG\Property(property="expires_at",type="string"),
+     *                      @SWG\Property(property="access_token",type="string")
+     *                  )
+     *              ),
+     *              @SWG\Property(
+     *                  property="message",
+     *                  type="string"
+     *              )
+     *          )
+     *      )
+     * )
+     */
     public function login(Request $request){
 
         $credentials = $request->only('email', 'password');
@@ -36,7 +89,34 @@ class AuthController extends AppBaseController
             SVP vérifier votre e-mail ou votre mot de passe.',401);
         }
     }
-
+    /**
+     * @param Request $request
+     * @return Response
+     *
+     * @SWG\Get(
+     *      path="/users/logout",
+     *      summary="User logout",
+     *      tags={"User"},
+     *      description="User logout",
+     *      produces={"application/json"},
+     *
+     *      @SWG\Response(
+     *          response=200,
+     *          description="successful operation",
+     *          @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(
+     *                  property="success",
+     *                  type="boolean"
+     *              ),
+     *              @SWG\Property(
+     *                  property="message",
+     *                  type="string"
+     *              )
+     *          )
+     *      )
+     * )
+     */
     public function logout(Request $request)
     {
         $accessToken = Auth::user()->token();

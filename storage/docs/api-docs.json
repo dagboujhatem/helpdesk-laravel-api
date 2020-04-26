@@ -97,6 +97,97 @@
                 }
             }
         },
+        "/forgot-password": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "User forgot password",
+                "description": "User forgot password",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "User e-mail address",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "email": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/reset-password": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "User reset password",
+                "description": "User reset password",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "User reset password data",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "token": {
+                                    "type": "string"
+                                },
+                                "newPassword": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
         "/tickets": {
             "get": {
                 "tags": [

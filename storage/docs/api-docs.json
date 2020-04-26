@@ -159,10 +159,16 @@
                         "required": true,
                         "schema": {
                             "properties": {
-                                "token": {
+                                "email": {
                                     "type": "string"
                                 },
-                                "newPassword": {
+                                "password": {
+                                    "type": "string"
+                                },
+                                "password_confirmation": {
+                                    "type": "string"
+                                },
+                                "token": {
                                     "type": "string"
                                 }
                             },

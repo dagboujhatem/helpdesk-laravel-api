@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Requests\API\PasswordResetRequestAPIRequest;
+use App\Http\Requests\API\PasswordResetSuccessAPIRequest;
 use App\Notifications\PasswordResetRequest;
 use App\Notifications\PasswordResetSuccess;
 use App\PasswordReset;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
-use Illuminate\Support\Facades\App;
 
 class PasswordResetController extends AppBaseController
 {
@@ -52,13 +53,8 @@ class PasswordResetController extends AppBaseController
      *      )
      * )
      */
-    public function forgotPassword(Request $request)
+    public function forgotPassword(PasswordResetRequestAPIRequest $request)
     {
-        // request validate
-        $request->validate([
-            'email' => 'required|string|email',
-        ]);
-
         // find user by e-mail address
         $user = User::where('email', $request->email)->first();
         if (!$user)
@@ -135,15 +131,8 @@ class PasswordResetController extends AppBaseController
      *      )
      * )
      */
-    public function resetPassword(Request $request)
+    public function resetPassword(PasswordResetSuccessAPIRequest $request)
     {
-        // request validate
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string|confirmed',
-            'password_confirmation' => 'required|string',
-            'token' => 'required|string'
-        ]);
 
         // get the reset password Object
         $passwordReset = PasswordReset::where([

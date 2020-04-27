@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\API\CreateTicketAPIRequest;
+use App\Http\Requests\API\AuthUserAPIRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
 use Auth;
-use Carbon\Carbon;
 
 class AuthController extends AppBaseController
 {
@@ -64,7 +62,7 @@ class AuthController extends AppBaseController
      *      )
      * )
      */
-    public function login(Request $request){
+    public function login(AuthUserAPIRequest $request){
 
         $credentials = $request->only('email', 'password');
 

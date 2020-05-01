@@ -35,6 +35,7 @@ class TicketAPIController extends AppBaseController
      *      tags={"Ticket"},
      *      description="Get all Tickets",
      *      produces={"application/json"},
+     *      security = {{"Bearer": {}}},
      *      @SWG\Response(
      *          response=200,
      *          description="successful operation",
@@ -78,6 +79,7 @@ class TicketAPIController extends AppBaseController
      *      tags={"Ticket"},
      *      description="Store Ticket",
      *      produces={"application/json"},
+     *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="body",
      *          in="body",
@@ -125,6 +127,7 @@ class TicketAPIController extends AppBaseController
      *      tags={"Ticket"},
      *      description="Get Ticket",
      *      produces={"application/json"},
+     *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="id",
      *          description="id of Ticket",
@@ -176,6 +179,7 @@ class TicketAPIController extends AppBaseController
      *      tags={"Ticket"},
      *      description="Update Ticket",
      *      produces={"application/json"},
+     *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="id",
      *          description="id of Ticket",
@@ -237,6 +241,7 @@ class TicketAPIController extends AppBaseController
      *      tags={"Ticket"},
      *      description="Delete Ticket",
      *      produces={"application/json"},
+     *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="id",
      *          description="id of Ticket",

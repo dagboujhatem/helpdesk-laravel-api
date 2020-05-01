@@ -37,6 +37,7 @@ class UserAPIController extends AppBaseController
      *      tags={"User"},
      *      description="Get all Users",
      *      produces={"application/json"},
+     *      security = {{"Bearer": {}}},
      *      @SWG\Response(
      *          response=200,
      *          description="successful operation",
@@ -80,6 +81,7 @@ class UserAPIController extends AppBaseController
      *      tags={"User"},
      *      description="Store User",
      *      produces={"application/json"},
+     *     security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="body",
      *          in="body",
@@ -116,7 +118,7 @@ class UserAPIController extends AppBaseController
 
         // upload photo
         $path = $request->file('photo')->store('app/public/avatars');
-        $input['photo'] = Storage::url($path);
+        $input['photo'] = storage_path() . $path;
 
         // save user in database
         $user = $this->userRepository->create($input);
@@ -138,6 +140,7 @@ class UserAPIController extends AppBaseController
      *      tags={"User"},
      *      description="Get User",
      *      produces={"application/json"},
+     *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="id",
      *          description="id of User",
@@ -192,6 +195,7 @@ class UserAPIController extends AppBaseController
      *      tags={"User"},
      *      description="Update User",
      *      produces={"application/json"},
+     *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="id",
      *          description="id of User",
@@ -256,6 +260,7 @@ class UserAPIController extends AppBaseController
      *      tags={"User"},
      *      description="Delete User",
      *      produces={"application/json"},
+     *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="id",
      *          description="id of User",
@@ -283,6 +288,7 @@ class UserAPIController extends AppBaseController
      *          )
      *      )
      * )
+     * @throws \Exception
      */
     public function destroy($id)
     {

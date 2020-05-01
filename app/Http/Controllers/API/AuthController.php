@@ -97,7 +97,7 @@ class AuthController extends AppBaseController
      *      tags={"User"},
      *      description="User logout",
      *      produces={"application/json"},
-     *
+     *      security = {{"Bearer": {}}},
      *      @SWG\Response(
      *          response=200,
      *          description="successful operation",

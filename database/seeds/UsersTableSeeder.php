@@ -30,7 +30,7 @@ class UsersTableSeeder extends Seeder
                 'telephone' => $faker->e164PhoneNumber ,
                 'adresse' => $faker->streetAddress,
                 'departement' => 'Monétique',
-                'lieu_de_travail' => 'Siége',
+                'lieu_de_travail' => 'Siège',
                 'date_d_embauche' => now(),
                 'photo' => $faker->unique()->imageUrl($width = 50, $height = 50 ,'people'),
                 ])->assignRole('Administrateur');
@@ -63,7 +63,7 @@ class UsersTableSeeder extends Seeder
                 'telephone' => $faker->e164PhoneNumber ,
                 'adresse' => $faker->streetAddress,
                 'departement' => 'Monétique',
-                'lieu_de_travail' => 'Siége',
+                'lieu_de_travail' => 'Siège',
                 'date_d_embauche' => now(),
                 'photo' => $faker->unique()->imageUrl($width = 50, $height = 50 ,'people'),
                 ])->assignRole('Personnel');

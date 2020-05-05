@@ -152,7 +152,7 @@ class User extends Authenticatable
         'identifiant' => 'required',
         'nom' => 'required',
         'prenom' => 'required',
-        'email' => 'required|email|max:255|unique:users,email',
+        'email' => 'required|email|max:255|unique:users,email,NULL,id,deleted_at,NULL',
         'password' => 'required',
         'cin' => 'required',
         'telephone' => 'required',

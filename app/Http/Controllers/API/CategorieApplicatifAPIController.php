@@ -2,29 +2,28 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Requests\API\CreateUserAPIRequest;
-use App\Http\Requests\API\UpdateUserAPIRequest;
-use App\User;
-use App\Repositories\UserRepository;
+use App\Http\Requests\API\CreateCategorieApplicatifAPIRequest;
+use App\Http\Requests\API\UpdateCategorieApplicatifAPIRequest;
+use App\CategorieApplicatif;
+use App\Repositories\CategorieApplicatifRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Support\Facades\Storage;
 use Response;
-use Illuminate\Support\Facades\Hash;
 
 /**
- * Class UserController
+ * Class CategorieApplicatifController
  * @package App\Http\Controllers\API
  */
 
-class UserAPIController extends AppBaseController
+class CategorieApplicatifAPIController extends AppBaseController
 {
-    /** @var  UserRepository */
-    private $userRepository;
+    /** @var  CategorieApplicatifRepository */
+    private $categorieApplicatifRepository;
 
-    public function __construct(UserRepository $userRepo)
+    public function __construct(CategorieApplicatifRepository $categorieApplicatifRepo)
     {
-        $this->userRepository = $userRepo;
+        $this->categorieApplicatifRepository = $categorieApplicatifRepo;
     }
 
     /**
@@ -32,10 +31,10 @@ class UserAPIController extends AppBaseController
      * @return Response
      *
      * @SWG\Get(
-     *      path="/users",
-     *      summary="Get a listing of the Users.",
-     *      tags={"User"},
-     *      description="Get all Users",
+     *      path="/categorieApplicatifs",
+     *      summary="Get a listing of the CategorieApplicatifs.",
+     *      tags={"CategorieApplicatif"},
+     *      description="Get all CategorieApplicatifs",
      *      produces={"application/json"},
      *      security = {{"Bearer": {}}},
      *      @SWG\Response(
@@ -50,7 +49,7 @@ class UserAPIController extends AppBaseController
      *              @SWG\Property(
      *                  property="data",
      *                  type="array",
-     *                  @SWG\Items(ref="#/definitions/User")
+     *                  @SWG\Items(ref="#/definitions/CategorieApplicatif")
      *              ),
      *              @SWG\Property(
      *                  property="message",
@@ -62,35 +61,33 @@ class UserAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $users = $this->userRepository->all(
+        $categorieApplicatifs = $this->categorieApplicatifRepository->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
         );
-        foreach ($users as $user) {
-             $user->role = $user->getRoleNames()[0];
-        }
 
-        return $this->sendResponse($users->toArray(), 'Utilisateurs récupérés avec succès.');
+        return $this->sendResponse($categorieApplicatifs->toArray(),
+            'Catégories applicatifs récupérées avec succès.');
     }
 
     /**
-     * @param CreateUserAPIRequest $request
+     * @param CreateCategorieApplicatifAPIRequest $request
      * @return Response
      *
      * @SWG\Post(
-     *      path="/users",
-     *      summary="Store a newly created User in storage",
-     *      tags={"User"},
-     *      description="Store User",
+     *      path="/categorieApplicatifs",
+     *      summary="Store a newly created CategorieApplicatif in storage",
+     *      tags={"CategorieApplicatif"},
+     *      description="Store CategorieApplicatif",
      *      produces={"application/json"},
-     *     security = {{"Bearer": {}}},
+     *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="body",
      *          in="body",
-     *          description="User that should be stored",
+     *          description="CategorieApplicatif that should be stored",
      *          required=false,
-     *          @SWG\Schema(ref="#/definitions/User")
+     *          @SWG\Schema(ref="#/definitions/CategorieApplicatif")
      *      ),
      *      @SWG\Response(
      *          response=200,
@@ -103,7 +100,7 @@ class UserAPIController extends AppBaseController
      *              ),
      *              @SWG\Property(
      *                  property="data",
-     *                  ref="#/definitions/User"
+     *                  ref="#/definitions/CategorieApplicatif"
      *              ),
      *              @SWG\Property(
      *                  property="message",
@@ -113,27 +110,20 @@ class UserAPIController extends AppBaseController
      *      )
      * )
      */
-    public function store(CreateUserAPIRequest $request)
+    public function store(CreateCategorieApplicatifAPIRequest $request)
     {
         $input = $request->all();
-        // crypt the password
-        $input['password'] = Hash::make($input['password']);
 
-        // upload photo
-        if($request->hasFile('photo')){
-            $path = $request->file('photo')->store('avatars');
-            $input['photo'] = Storage::url($path);
+        // save the file-solution
+        if($request->hasFile('solution_file')){
+            $path = $request->file('solution_file')->store('solution_categorie_applicatif');
+            $input['solution_file'] = Storage::url($path);
         }
 
+        $categorieApplicatif = $this->categorieApplicatifRepository->create($input);
 
-        // save user in database
-        $user = $this->userRepository->create($input);
-
-        // assign user role
-        $role = $input['role'];
-        $user->assignRole($role);
-
-        return $this->sendResponse($user->toArray(), 'L\'utilisateur a été ajouté avec succès.');
+        return $this->sendResponse($categorieApplicatif->toArray(),
+            'Catégorie applicatif enregistrée avec succès.');
     }
 
     /**
@@ -141,15 +131,15 @@ class UserAPIController extends AppBaseController
      * @return Response
      *
      * @SWG\Get(
-     *      path="/users/{id}",
-     *      summary="Display the specified User",
-     *      tags={"User"},
-     *      description="Get User",
+     *      path="/categorieApplicatifs/{id}",
+     *      summary="Display the specified CategorieApplicatif",
+     *      tags={"CategorieApplicatif"},
+     *      description="Get CategorieApplicatif",
      *      produces={"application/json"},
      *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="id",
-     *          description="id of User",
+     *          description="id of CategorieApplicatif",
      *          type="integer",
      *          required=true,
      *          in="path"
@@ -165,7 +155,7 @@ class UserAPIController extends AppBaseController
      *              ),
      *              @SWG\Property(
      *                  property="data",
-     *                  ref="#/definitions/User"
+     *                  ref="#/definitions/CategorieApplicatif"
      *              ),
      *              @SWG\Property(
      *                  property="message",
@@ -177,34 +167,32 @@ class UserAPIController extends AppBaseController
      */
     public function show($id)
     {
-        /** @var User $user */
-        $user = $this->userRepository->find($id);
+        /** @var CategorieApplicatif $categorieApplicatif */
+        $categorieApplicatif = $this->categorieApplicatifRepository->find($id);
 
-        if (empty($user)) {
-            return $this->sendError('Utilisateur non trouvé.');
+        if (empty($categorieApplicatif)) {
+            return $this->sendError('Catégorie applicatif introuvable.');
         }
 
-        // get the user role
-        $user['role'] = $user->getRoleNames()->first();
-
-        return $this->sendResponse($user->toArray(), 'L\'utilisateur a été récupéré avec succès.');
+        return $this->sendResponse($categorieApplicatif->toArray(),
+            'Catégorie applicatif récupérée avec succès.');
     }
 
     /**
      * @param int $id
-     * @param UpdateUserAPIRequest $request
+     * @param UpdateCategorieApplicatifAPIRequest $request
      * @return Response
      *
      * @SWG\Put(
-     *      path="/users/{id}",
-     *      summary="Update the specified User in storage",
-     *      tags={"User"},
-     *      description="Update User",
+     *      path="/categorieApplicatifs/{id}",
+     *      summary="Update the specified CategorieApplicatif in storage",
+     *      tags={"CategorieApplicatif"},
+     *      description="Update CategorieApplicatif",
      *      produces={"application/json"},
      *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="id",
-     *          description="id of User",
+     *          description="id of CategorieApplicatif",
      *          type="integer",
      *          required=true,
      *          in="path"
@@ -212,9 +200,9 @@ class UserAPIController extends AppBaseController
      *      @SWG\Parameter(
      *          name="body",
      *          in="body",
-     *          description="User that should be updated",
+     *          description="CategorieApplicatif that should be updated",
      *          required=false,
-     *          @SWG\Schema(ref="#/definitions/User")
+     *          @SWG\Schema(ref="#/definitions/CategorieApplicatif")
      *      ),
      *      @SWG\Response(
      *          response=200,
@@ -227,7 +215,7 @@ class UserAPIController extends AppBaseController
      *              ),
      *              @SWG\Property(
      *                  property="data",
-     *                  ref="#/definitions/User"
+     *                  ref="#/definitions/CategorieApplicatif"
      *              ),
      *              @SWG\Property(
      *                  property="message",
@@ -237,50 +225,21 @@ class UserAPIController extends AppBaseController
      *      )
      * )
      */
-    public function update($id, UpdateUserAPIRequest $request)
+    public function update($id, UpdateCategorieApplicatifAPIRequest $request)
     {
         $input = $request->all();
 
-        /** @var User $user */
-        $user = $this->userRepository->find($id);
+        /** @var CategorieApplicatif $categorieApplicatif */
+        $categorieApplicatif = $this->categorieApplicatifRepository->find($id);
 
-        if (empty($user)) {
-            return $this->sendError('Utilisateur non trouvé.');
+        if (empty($categorieApplicatif)) {
+            return $this->sendError('Catégorie applicatif introuvable.');
         }
 
-        // crypt the password if exist
-        if ($request->password){
-            $input['password'] = Hash::make($input['password']);
-        }
+        $categorieApplicatif = $this->categorieApplicatifRepository->update($input, $id);
 
-        // upload the new photo if exist
-        if($request->hasFile('photo')){
-            $path = $request->file('photo')->store('avatars');
-            $input['photo'] = Storage::url($path);
-            // delete old photo if exist
-            $filename = basename($user->photo);
-            $exists = Storage::exists('avatars/'.$filename);
-            if($exists)
-            {
-                // delete the photo
-                Storage::delete('avatars/'.$filename);
-            }
-            $user->delete();
-        }
-
-        $user = $this->userRepository->update($input, $id);
-
-        // re-assign role if is changed in angular interface
-        if($request->role !== $user->getRoleNames()->first())
-        {
-            // delete old role
-            $user->removeRole($user->roles->first());
-            // assign new role
-            $role = $input['role'];
-            $user->assignRole($role);
-        }
-
-        return $this->sendResponse($user->toArray(), 'L\'utilisateur a été mis à jour avec succès.');
+        return $this->sendResponse($categorieApplicatif->toArray(),
+            'Catégorie applicatif mis à jour avec succès');
     }
 
     /**
@@ -288,15 +247,15 @@ class UserAPIController extends AppBaseController
      * @return Response
      *
      * @SWG\Delete(
-     *      path="/users/{id}",
-     *      summary="Remove the specified User from storage",
-     *      tags={"User"},
-     *      description="Delete User",
+     *      path="/categorieApplicatifs/{id}",
+     *      summary="Remove the specified CategorieApplicatif from storage",
+     *      tags={"CategorieApplicatif"},
+     *      description="Delete CategorieApplicatif",
      *      produces={"application/json"},
      *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="id",
-     *          description="id of User",
+     *          description="id of CategorieApplicatif",
      *          type="integer",
      *          required=true,
      *          in="path"
@@ -321,29 +280,28 @@ class UserAPIController extends AppBaseController
      *          )
      *      )
      * )
-     * @throws \Exception
      */
     public function destroy($id)
     {
-        /** @var User $user */
-        $user = $this->userRepository->find($id);
+        /** @var CategorieApplicatif $categorieApplicatif */
+        $categorieApplicatif = $this->categorieApplicatifRepository->find($id);
 
-        if (empty($user)) {
-            return $this->sendError('Utilisateur non trouvé.');
+        if (empty($categorieApplicatif)) {
+            return $this->sendError('Catégorie applicatif introuvable.');
         }
 
-        // remove role
-        $user->removeRole($user->roles->first());
-        // delete photo if exist
-        $filename = basename($user->photo);
-        $exists = Storage::exists('avatars/'.$filename);
+        // delete solution_file if exist
+        $filename = basename($categorieApplicatif->solution_file);
+        $exists = Storage::exists('solution_categorie_applicatif/'.$filename);
         if($exists)
         {
-            // delete the photo
-            Storage::delete('avatars/'.$filename);
+            // delete the solution_file
+            Storage::delete('solution_categorie_applicatif/'.$filename);
         }
-        $user->delete();
 
-        return $this->sendSuccess('L\'utilisateur a bien été supprimé avec succès.');
+        // delete catégorie applicatif fom DB
+        $categorieApplicatif->delete();
+
+        return $this->sendSuccess('Catégorie applicatif supprimée avec succès.');
     }
 }

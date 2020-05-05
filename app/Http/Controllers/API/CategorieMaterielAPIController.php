@@ -2,29 +2,28 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Requests\API\CreateUserAPIRequest;
-use App\Http\Requests\API\UpdateUserAPIRequest;
-use App\User;
-use App\Repositories\UserRepository;
+use App\Http\Requests\API\CreateCategorieMaterielAPIRequest;
+use App\Http\Requests\API\UpdateCategorieMaterielAPIRequest;
+use App\CategorieMateriel;
+use App\Repositories\CategorieMaterielRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Support\Facades\Storage;
 use Response;
-use Illuminate\Support\Facades\Hash;
 
 /**
- * Class UserController
+ * Class CategorieMaterielController
  * @package App\Http\Controllers\API
  */
 
-class UserAPIController extends AppBaseController
+class CategorieMaterielAPIController extends AppBaseController
 {
-    /** @var  UserRepository */
-    private $userRepository;
+    /** @var  CategorieMaterielRepository */
+    private $categorieMaterielRepository;
 
-    public function __construct(UserRepository $userRepo)
+    public function __construct(CategorieMaterielRepository $categorieMaterielRepo)
     {
-        $this->userRepository = $userRepo;
+        $this->categorieMaterielRepository = $categorieMaterielRepo;
     }
 
     /**
@@ -32,10 +31,10 @@ class UserAPIController extends AppBaseController
      * @return Response
      *
      * @SWG\Get(
-     *      path="/users",
-     *      summary="Get a listing of the Users.",
-     *      tags={"User"},
-     *      description="Get all Users",
+     *      path="/categorieMateriels",
+     *      summary="Get a listing of the CategorieMateriels.",
+     *      tags={"CategorieMateriel"},
+     *      description="Get all CategorieMateriels",
      *      produces={"application/json"},
      *      security = {{"Bearer": {}}},
      *      @SWG\Response(
@@ -50,7 +49,7 @@ class UserAPIController extends AppBaseController
      *              @SWG\Property(
      *                  property="data",
      *                  type="array",
-     *                  @SWG\Items(ref="#/definitions/User")
+     *                  @SWG\Items(ref="#/definitions/CategorieMateriel")
      *              ),
      *              @SWG\Property(
      *                  property="message",
@@ -62,35 +61,33 @@ class UserAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $users = $this->userRepository->all(
+        $categorieMateriels = $this->categorieMaterielRepository->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
         );
-        foreach ($users as $user) {
-             $user->role = $user->getRoleNames()[0];
-        }
 
-        return $this->sendResponse($users->toArray(), 'Utilisateurs récupérés avec succès.');
+        return $this->sendResponse($categorieMateriels->toArray(),
+            'Catégories matériels récupérées avec succès.');
     }
 
     /**
-     * @param CreateUserAPIRequest $request
+     * @param CreateCategorieMaterielAPIRequest $request
      * @return Response
      *
      * @SWG\Post(
-     *      path="/users",
-     *      summary="Store a newly created User in storage",
-     *      tags={"User"},
-     *      description="Store User",
+     *      path="/categorieMateriels",
+     *      summary="Store a newly created CategorieMateriel in storage",
+     *      tags={"CategorieMateriel"},
+     *      description="Store CategorieMateriel",
      *      produces={"application/json"},
-     *     security = {{"Bearer": {}}},
+     *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="body",
      *          in="body",
-     *          description="User that should be stored",
+     *          description="CategorieMateriel that should be stored",
      *          required=false,
-     *          @SWG\Schema(ref="#/definitions/User")
+     *          @SWG\Schema(ref="#/definitions/CategorieMateriel")
      *      ),
      *      @SWG\Response(
      *          response=200,
@@ -103,7 +100,7 @@ class UserAPIController extends AppBaseController
      *              ),
      *              @SWG\Property(
      *                  property="data",
-     *                  ref="#/definitions/User"
+     *                  ref="#/definitions/CategorieMateriel"
      *              ),
      *              @SWG\Property(
      *                  property="message",
@@ -113,27 +110,20 @@ class UserAPIController extends AppBaseController
      *      )
      * )
      */
-    public function store(CreateUserAPIRequest $request)
+    public function store(CreateCategorieMaterielAPIRequest $request)
     {
         $input = $request->all();
-        // crypt the password
-        $input['password'] = Hash::make($input['password']);
 
-        // upload photo
-        if($request->hasFile('photo')){
-            $path = $request->file('photo')->store('avatars');
-            $input['photo'] = Storage::url($path);
+        // save the file-solution
+        if($request->hasFile('solution_file')){
+            $path = $request->file('solution_file')->store('solution_categorie_materiel');
+            $input['solution_file'] = Storage::url($path);
         }
 
+        $categorieMateriel = $this->categorieMaterielRepository->create($input);
 
-        // save user in database
-        $user = $this->userRepository->create($input);
-
-        // assign user role
-        $role = $input['role'];
-        $user->assignRole($role);
-
-        return $this->sendResponse($user->toArray(), 'L\'utilisateur a été ajouté avec succès.');
+        return $this->sendResponse($categorieMateriel->toArray(),
+            'Catégorie matériel enregistré avec succès.');
     }
 
     /**
@@ -141,15 +131,15 @@ class UserAPIController extends AppBaseController
      * @return Response
      *
      * @SWG\Get(
-     *      path="/users/{id}",
-     *      summary="Display the specified User",
-     *      tags={"User"},
-     *      description="Get User",
+     *      path="/categorieMateriels/{id}",
+     *      summary="Display the specified CategorieMateriel",
+     *      tags={"CategorieMateriel"},
+     *      description="Get CategorieMateriel",
      *      produces={"application/json"},
      *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="id",
-     *          description="id of User",
+     *          description="id of CategorieMateriel",
      *          type="integer",
      *          required=true,
      *          in="path"
@@ -165,7 +155,7 @@ class UserAPIController extends AppBaseController
      *              ),
      *              @SWG\Property(
      *                  property="data",
-     *                  ref="#/definitions/User"
+     *                  ref="#/definitions/CategorieMateriel"
      *              ),
      *              @SWG\Property(
      *                  property="message",
@@ -177,34 +167,32 @@ class UserAPIController extends AppBaseController
      */
     public function show($id)
     {
-        /** @var User $user */
-        $user = $this->userRepository->find($id);
+        /** @var CategorieMateriel $categorieMateriel */
+        $categorieMateriel = $this->categorieMaterielRepository->find($id);
 
-        if (empty($user)) {
-            return $this->sendError('Utilisateur non trouvé.');
+        if (empty($categorieMateriel)) {
+            return $this->sendError('Catégorie matériel introuvable.');
         }
 
-        // get the user role
-        $user['role'] = $user->getRoleNames()->first();
-
-        return $this->sendResponse($user->toArray(), 'L\'utilisateur a été récupéré avec succès.');
+        return $this->sendResponse($categorieMateriel->toArray(),
+            'Catégorie matériel récupéré avec succès.');
     }
 
     /**
      * @param int $id
-     * @param UpdateUserAPIRequest $request
+     * @param UpdateCategorieMaterielAPIRequest $request
      * @return Response
      *
      * @SWG\Put(
-     *      path="/users/{id}",
-     *      summary="Update the specified User in storage",
-     *      tags={"User"},
-     *      description="Update User",
+     *      path="/categorieMateriels/{id}",
+     *      summary="Update the specified CategorieMateriel in storage",
+     *      tags={"CategorieMateriel"},
+     *      description="Update CategorieMateriel",
      *      produces={"application/json"},
      *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="id",
-     *          description="id of User",
+     *          description="id of CategorieMateriel",
      *          type="integer",
      *          required=true,
      *          in="path"
@@ -212,9 +200,9 @@ class UserAPIController extends AppBaseController
      *      @SWG\Parameter(
      *          name="body",
      *          in="body",
-     *          description="User that should be updated",
+     *          description="CategorieMateriel that should be updated",
      *          required=false,
-     *          @SWG\Schema(ref="#/definitions/User")
+     *          @SWG\Schema(ref="#/definitions/CategorieMateriel")
      *      ),
      *      @SWG\Response(
      *          response=200,
@@ -227,7 +215,7 @@ class UserAPIController extends AppBaseController
      *              ),
      *              @SWG\Property(
      *                  property="data",
-     *                  ref="#/definitions/User"
+     *                  ref="#/definitions/CategorieMateriel"
      *              ),
      *              @SWG\Property(
      *                  property="message",
@@ -237,50 +225,21 @@ class UserAPIController extends AppBaseController
      *      )
      * )
      */
-    public function update($id, UpdateUserAPIRequest $request)
+    public function update($id, UpdateCategorieMaterielAPIRequest $request)
     {
         $input = $request->all();
 
-        /** @var User $user */
-        $user = $this->userRepository->find($id);
+        /** @var CategorieMateriel $categorieMateriel */
+        $categorieMateriel = $this->categorieMaterielRepository->find($id);
 
-        if (empty($user)) {
-            return $this->sendError('Utilisateur non trouvé.');
+        if (empty($categorieMateriel)) {
+            return $this->sendError('Catégorie matériel introuvable.');
         }
 
-        // crypt the password if exist
-        if ($request->password){
-            $input['password'] = Hash::make($input['password']);
-        }
+        $categorieMateriel = $this->categorieMaterielRepository->update($input, $id);
 
-        // upload the new photo if exist
-        if($request->hasFile('photo')){
-            $path = $request->file('photo')->store('avatars');
-            $input['photo'] = Storage::url($path);
-            // delete old photo if exist
-            $filename = basename($user->photo);
-            $exists = Storage::exists('avatars/'.$filename);
-            if($exists)
-            {
-                // delete the photo
-                Storage::delete('avatars/'.$filename);
-            }
-            $user->delete();
-        }
-
-        $user = $this->userRepository->update($input, $id);
-
-        // re-assign role if is changed in angular interface
-        if($request->role !== $user->getRoleNames()->first())
-        {
-            // delete old role
-            $user->removeRole($user->roles->first());
-            // assign new role
-            $role = $input['role'];
-            $user->assignRole($role);
-        }
-
-        return $this->sendResponse($user->toArray(), 'L\'utilisateur a été mis à jour avec succès.');
+        return $this->sendResponse($categorieMateriel->toArray(),
+            'Catégorie matériel mis à jour avec succès.');
     }
 
     /**
@@ -288,15 +247,15 @@ class UserAPIController extends AppBaseController
      * @return Response
      *
      * @SWG\Delete(
-     *      path="/users/{id}",
-     *      summary="Remove the specified User from storage",
-     *      tags={"User"},
-     *      description="Delete User",
+     *      path="/categorieMateriels/{id}",
+     *      summary="Remove the specified CategorieMateriel from storage",
+     *      tags={"CategorieMateriel"},
+     *      description="Delete CategorieMateriel",
      *      produces={"application/json"},
      *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="id",
-     *          description="id of User",
+     *          description="id of CategorieMateriel",
      *          type="integer",
      *          required=true,
      *          in="path"
@@ -321,29 +280,28 @@ class UserAPIController extends AppBaseController
      *          )
      *      )
      * )
-     * @throws \Exception
      */
     public function destroy($id)
     {
-        /** @var User $user */
-        $user = $this->userRepository->find($id);
+        /** @var CategorieMateriel $categorieMateriel */
+        $categorieMateriel = $this->categorieMaterielRepository->find($id);
 
-        if (empty($user)) {
-            return $this->sendError('Utilisateur non trouvé.');
+        if (empty($categorieMateriel)) {
+            return $this->sendError('Catégorie matériel introuvable.');
         }
 
-        // remove role
-        $user->removeRole($user->roles->first());
-        // delete photo if exist
-        $filename = basename($user->photo);
-        $exists = Storage::exists('avatars/'.$filename);
+        // delete solution_file if exist
+        $filename = basename($categorieMateriel->solution_file);
+        $exists = Storage::exists('solution_categorie_materiel/'.$filename);
         if($exists)
         {
-            // delete the photo
-            Storage::delete('avatars/'.$filename);
+            // delete the solution_file
+            Storage::delete('solution_categorie_materiel/'.$filename);
         }
-        $user->delete();
 
-        return $this->sendSuccess('L\'utilisateur a bien été supprimé avec succès.');
+        // delete catégorie matériel fom DB
+        $categorieMateriel->delete();
+
+        return $this->sendSuccess('Catégorie matériel supprimée avec succès.');
     }
 }

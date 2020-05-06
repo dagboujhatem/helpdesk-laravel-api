@@ -54,7 +54,7 @@ class CategorieMateriel extends Model
     use SoftDeletes;
 
     public $table = 'categorie_materiels';
-    
+
 
     protected $dates = ['deleted_at'];
 
@@ -86,11 +86,11 @@ class CategorieMateriel extends Model
      * @var array
      */
     public static $rules = [
-        'objet' => 'required',
-        'probleme' => 'required',
-        'description' => 'required',
+        'objet' => 'required|string',
+        'probleme' => 'required|string',
+        'description' => 'required|string',
         'solution_file' => 'required'
     ];
 
-    
+
 }

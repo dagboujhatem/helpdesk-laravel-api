@@ -236,6 +236,22 @@ class CategorieMaterielAPIController extends AppBaseController
             return $this->sendError('Catégorie matériel introuvable.');
         }
 
+        // if request has file-solution
+        if($request->hasFile('solution_file')){
+            // 1.0 upload new solution_file
+            $path = $request->file('solution_file')->store('solution_categorie_materiel');
+            $input['solution_file'] = Storage::url($path);
+            // 2.0 delete old solution_file
+            // delete solution_file if exist
+            $filename = basename($categorieMateriel->solution_file);
+            $exists = Storage::exists('solution_categorie_materiel/'.$filename);
+            if($exists)
+            {
+                // delete the solution_file
+                Storage::delete('solution_categorie_materiel/'.$filename);
+            }
+        }
+
         $categorieMateriel = $this->categorieMaterielRepository->update($input, $id);
 
         return $this->sendResponse($categorieMateriel->toArray(),

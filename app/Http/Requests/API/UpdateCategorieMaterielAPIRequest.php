@@ -24,8 +24,11 @@ class UpdateCategorieMaterielAPIRequest extends APIRequest
      */
     public function rules()
     {
-        $rules = CategorieMateriel::$rules;
-        
-        return $rules;
+        return [
+            'objet' => 'required|string',
+            'probleme' => 'required|string',
+            'description' => 'required|string',
+            'solution_file' => ''
+        ];
     }
 }

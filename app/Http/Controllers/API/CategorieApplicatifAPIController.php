@@ -236,6 +236,22 @@ class CategorieApplicatifAPIController extends AppBaseController
             return $this->sendError('Catégorie applicatif introuvable.');
         }
 
+        // if request has file-solution
+        if($request->hasFile('solution_file')){
+            // 1.0 upload new solution_file
+            $path = $request->file('solution_file')->store('solution_categorie_applicatif');
+            $input['solution_file'] = Storage::url($path);
+            // 2.0 delete old solution_file
+            // delete solution_file if exist
+            $filename = basename($categorieApplicatif->solution_file);
+            $exists = Storage::exists('solution_categorie_applicatif/'.$filename);
+            if($exists)
+            {
+                // delete the solution_file
+                Storage::delete('solution_categorie_applicatif/'.$filename);
+            }
+        }
+
         $categorieApplicatif = $this->categorieApplicatifRepository->update($input, $id);
 
         return $this->sendResponse($categorieApplicatif->toArray(),

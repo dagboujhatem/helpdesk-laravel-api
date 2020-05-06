@@ -54,7 +54,7 @@ class CategorieApplicatif extends Model
     use SoftDeletes;
 
     public $table = 'categorie_applicatifs';
-    
+
 
     protected $dates = ['deleted_at'];
 
@@ -86,11 +86,11 @@ class CategorieApplicatif extends Model
      * @var array
      */
     public static $rules = [
-        'type' => 'required',
-        'probleme' => 'required',
-        'description' => 'required',
+        'type' => 'required|string',
+        'probleme' => 'required|string',
+        'description' => 'required|string',
         'solution_file' => 'required'
     ];
 
-    
+
 }

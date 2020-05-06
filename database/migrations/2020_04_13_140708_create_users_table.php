@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('identifiant');
             $table->string('nom');
             $table->string('prenom');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->string('password');
             $table->string('cin');
             $table->string('telephone');
@@ -29,6 +29,7 @@ class CreateUsersTable extends Migration
             $table->string('photo');
             $table->timestamps();
             $table->softDeletes();
+            $table->unique(['email', 'deleted_at']);
         });
     }
 

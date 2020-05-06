@@ -3,7 +3,6 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -16,9 +15,9 @@ class PasswordResetRequest extends Notification
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($token)
     {
-        //
+        $this->token = $token;
     }
 
     /**
@@ -40,10 +39,15 @@ class PasswordResetRequest extends Notification
      */
     public function toMail($notifiable)
     {
+        $url = env("API_RESET_PASSWORD_URL") . $this->token;
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->level('success')
+            ->greeting(__('reset_password_request.greeting'))
+            ->line(__('reset_password_request.firstLigne'))
+            ->action(__('reset_password_request.actionText'), $url, 'success')
+            ->line(__('reset_password_request.secondLine'))
+            ->line(__('reset_password_request.ThirdLine'))
+            ->salutation(__('reset_password_request.salutation'));
     }
 
     /**

@@ -8,11 +8,20 @@ use Response;
 /**
  * @SWG\Swagger(
  *   basePath="/api/v1",
+ *   schemes={"http","https"},
+ *   @SWG\SecurityScheme(
+ *      securityDefinition="Bearer",
+ *      type="apiKey",
+ *      name="Authorization",
+ *      in="header"
+ *   ),
  *   @SWG\Info(
- *     title="Laravel Generator APIs",
+ *     title="BNA Helpdesk REST API Docs",
+ *     description="This documentation summarizes all the calls to our REST API.",
  *     version="1.0.0",
  *   )
  * )
+ *
  * This class should be parent class for other API controllers
  * Class AppBaseController
  */

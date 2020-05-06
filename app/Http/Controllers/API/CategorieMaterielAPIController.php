@@ -2,27 +2,28 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Requests\API\CreateTicketAPIRequest;
-use App\Http\Requests\API\UpdateTicketAPIRequest;
-use App\Ticket;
-use App\Repositories\TicketRepository;
+use App\Http\Requests\API\CreateCategorieMaterielAPIRequest;
+use App\Http\Requests\API\UpdateCategorieMaterielAPIRequest;
+use App\CategorieMateriel;
+use App\Repositories\CategorieMaterielRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
+use Illuminate\Support\Facades\Storage;
 use Response;
 
 /**
- * Class TicketController
+ * Class CategorieMaterielController
  * @package App\Http\Controllers\API
  */
 
-class TicketAPIController extends AppBaseController
+class CategorieMaterielAPIController extends AppBaseController
 {
-    /** @var  TicketRepository */
-    private $ticketRepository;
+    /** @var  CategorieMaterielRepository */
+    private $categorieMaterielRepository;
 
-    public function __construct(TicketRepository $ticketRepo)
+    public function __construct(CategorieMaterielRepository $categorieMaterielRepo)
     {
-        $this->ticketRepository = $ticketRepo;
+        $this->categorieMaterielRepository = $categorieMaterielRepo;
     }
 
     /**
@@ -30,10 +31,10 @@ class TicketAPIController extends AppBaseController
      * @return Response
      *
      * @SWG\Get(
-     *      path="/tickets",
-     *      summary="Get a listing of the Tickets.",
-     *      tags={"Ticket"},
-     *      description="Get all Tickets",
+     *      path="/categorieMateriels",
+     *      summary="Get a listing of the CategorieMateriels.",
+     *      tags={"CategorieMateriel"},
+     *      description="Get all CategorieMateriels",
      *      produces={"application/json"},
      *      security = {{"Bearer": {}}},
      *      @SWG\Response(
@@ -48,7 +49,7 @@ class TicketAPIController extends AppBaseController
      *              @SWG\Property(
      *                  property="data",
      *                  type="array",
-     *                  @SWG\Items(ref="#/definitions/Ticket")
+     *                  @SWG\Items(ref="#/definitions/CategorieMateriel")
      *              ),
      *              @SWG\Property(
      *                  property="message",
@@ -60,32 +61,33 @@ class TicketAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $tickets = $this->ticketRepository->all(
+        $categorieMateriels = $this->categorieMaterielRepository->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
         );
 
-        return $this->sendResponse($tickets->toArray(), 'Tickets retrieved successfully');
+        return $this->sendResponse($categorieMateriels->toArray(),
+            'Catégories matériels récupérées avec succès.');
     }
 
     /**
-     * @param CreateTicketAPIRequest $request
+     * @param CreateCategorieMaterielAPIRequest $request
      * @return Response
      *
      * @SWG\Post(
-     *      path="/tickets",
-     *      summary="Store a newly created Ticket in storage",
-     *      tags={"Ticket"},
-     *      description="Store Ticket",
+     *      path="/categorieMateriels",
+     *      summary="Store a newly created CategorieMateriel in storage",
+     *      tags={"CategorieMateriel"},
+     *      description="Store CategorieMateriel",
      *      produces={"application/json"},
      *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="body",
      *          in="body",
-     *          description="Ticket that should be stored",
+     *          description="CategorieMateriel that should be stored",
      *          required=false,
-     *          @SWG\Schema(ref="#/definitions/Ticket")
+     *          @SWG\Schema(ref="#/definitions/CategorieMateriel")
      *      ),
      *      @SWG\Response(
      *          response=200,
@@ -98,7 +100,7 @@ class TicketAPIController extends AppBaseController
      *              ),
      *              @SWG\Property(
      *                  property="data",
-     *                  ref="#/definitions/Ticket"
+     *                  ref="#/definitions/CategorieMateriel"
      *              ),
      *              @SWG\Property(
      *                  property="message",
@@ -108,13 +110,20 @@ class TicketAPIController extends AppBaseController
      *      )
      * )
      */
-    public function store(CreateTicketAPIRequest $request)
+    public function store(CreateCategorieMaterielAPIRequest $request)
     {
         $input = $request->all();
 
-        $ticket = $this->ticketRepository->create($input);
+        // save the file-solution
+        if($request->hasFile('solution_file')){
+            $path = $request->file('solution_file')->store('solution_categorie_materiel');
+            $input['solution_file'] = Storage::url($path);
+        }
 
-        return $this->sendResponse($ticket->toArray(), 'Ticket saved successfully');
+        $categorieMateriel = $this->categorieMaterielRepository->create($input);
+
+        return $this->sendResponse($categorieMateriel->toArray(),
+            'Catégorie matériel enregistré avec succès.');
     }
 
     /**
@@ -122,15 +131,15 @@ class TicketAPIController extends AppBaseController
      * @return Response
      *
      * @SWG\Get(
-     *      path="/tickets/{id}",
-     *      summary="Display the specified Ticket",
-     *      tags={"Ticket"},
-     *      description="Get Ticket",
+     *      path="/categorieMateriels/{id}",
+     *      summary="Display the specified CategorieMateriel",
+     *      tags={"CategorieMateriel"},
+     *      description="Get CategorieMateriel",
      *      produces={"application/json"},
      *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="id",
-     *          description="id of Ticket",
+     *          description="id of CategorieMateriel",
      *          type="integer",
      *          required=true,
      *          in="path"
@@ -146,7 +155,7 @@ class TicketAPIController extends AppBaseController
      *              ),
      *              @SWG\Property(
      *                  property="data",
-     *                  ref="#/definitions/Ticket"
+     *                  ref="#/definitions/CategorieMateriel"
      *              ),
      *              @SWG\Property(
      *                  property="message",
@@ -158,31 +167,32 @@ class TicketAPIController extends AppBaseController
      */
     public function show($id)
     {
-        /** @var Ticket $ticket */
-        $ticket = $this->ticketRepository->find($id);
+        /** @var CategorieMateriel $categorieMateriel */
+        $categorieMateriel = $this->categorieMaterielRepository->find($id);
 
-        if (empty($ticket)) {
-            return $this->sendError('Ticket not found');
+        if (empty($categorieMateriel)) {
+            return $this->sendError('Catégorie matériel introuvable.');
         }
 
-        return $this->sendResponse($ticket->toArray(), 'Ticket retrieved successfully');
+        return $this->sendResponse($categorieMateriel->toArray(),
+            'Catégorie matériel récupéré avec succès.');
     }
 
     /**
      * @param int $id
-     * @param UpdateTicketAPIRequest $request
+     * @param UpdateCategorieMaterielAPIRequest $request
      * @return Response
      *
      * @SWG\Put(
-     *      path="/tickets/{id}",
-     *      summary="Update the specified Ticket in storage",
-     *      tags={"Ticket"},
-     *      description="Update Ticket",
+     *      path="/categorieMateriels/{id}",
+     *      summary="Update the specified CategorieMateriel in storage",
+     *      tags={"CategorieMateriel"},
+     *      description="Update CategorieMateriel",
      *      produces={"application/json"},
      *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="id",
-     *          description="id of Ticket",
+     *          description="id of CategorieMateriel",
      *          type="integer",
      *          required=true,
      *          in="path"
@@ -190,9 +200,9 @@ class TicketAPIController extends AppBaseController
      *      @SWG\Parameter(
      *          name="body",
      *          in="body",
-     *          description="Ticket that should be updated",
+     *          description="CategorieMateriel that should be updated",
      *          required=false,
-     *          @SWG\Schema(ref="#/definitions/Ticket")
+     *          @SWG\Schema(ref="#/definitions/CategorieMateriel")
      *      ),
      *      @SWG\Response(
      *          response=200,
@@ -205,7 +215,7 @@ class TicketAPIController extends AppBaseController
      *              ),
      *              @SWG\Property(
      *                  property="data",
-     *                  ref="#/definitions/Ticket"
+     *                  ref="#/definitions/CategorieMateriel"
      *              ),
      *              @SWG\Property(
      *                  property="message",
@@ -215,20 +225,21 @@ class TicketAPIController extends AppBaseController
      *      )
      * )
      */
-    public function update($id, UpdateTicketAPIRequest $request)
+    public function update($id, UpdateCategorieMaterielAPIRequest $request)
     {
         $input = $request->all();
 
-        /** @var Ticket $ticket */
-        $ticket = $this->ticketRepository->find($id);
+        /** @var CategorieMateriel $categorieMateriel */
+        $categorieMateriel = $this->categorieMaterielRepository->find($id);
 
-        if (empty($ticket)) {
-            return $this->sendError('Ticket not found');
+        if (empty($categorieMateriel)) {
+            return $this->sendError('Catégorie matériel introuvable.');
         }
 
-        $ticket = $this->ticketRepository->update($input, $id);
+        $categorieMateriel = $this->categorieMaterielRepository->update($input, $id);
 
-        return $this->sendResponse($ticket->toArray(), 'Ticket updated successfully');
+        return $this->sendResponse($categorieMateriel->toArray(),
+            'Catégorie matériel mis à jour avec succès.');
     }
 
     /**
@@ -236,15 +247,15 @@ class TicketAPIController extends AppBaseController
      * @return Response
      *
      * @SWG\Delete(
-     *      path="/tickets/{id}",
-     *      summary="Remove the specified Ticket from storage",
-     *      tags={"Ticket"},
-     *      description="Delete Ticket",
+     *      path="/categorieMateriels/{id}",
+     *      summary="Remove the specified CategorieMateriel from storage",
+     *      tags={"CategorieMateriel"},
+     *      description="Delete CategorieMateriel",
      *      produces={"application/json"},
      *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="id",
-     *          description="id of Ticket",
+     *          description="id of CategorieMateriel",
      *          type="integer",
      *          required=true,
      *          in="path"
@@ -272,15 +283,25 @@ class TicketAPIController extends AppBaseController
      */
     public function destroy($id)
     {
-        /** @var Ticket $ticket */
-        $ticket = $this->ticketRepository->find($id);
+        /** @var CategorieMateriel $categorieMateriel */
+        $categorieMateriel = $this->categorieMaterielRepository->find($id);
 
-        if (empty($ticket)) {
-            return $this->sendError('Ticket not found');
+        if (empty($categorieMateriel)) {
+            return $this->sendError('Catégorie matériel introuvable.');
         }
 
-        $ticket->delete();
+        // delete solution_file if exist
+        $filename = basename($categorieMateriel->solution_file);
+        $exists = Storage::exists('solution_categorie_materiel/'.$filename);
+        if($exists)
+        {
+            // delete the solution_file
+            Storage::delete('solution_categorie_materiel/'.$filename);
+        }
 
-        return $this->sendSuccess('Ticket deleted successfully');
+        // delete catégorie matériel fom DB
+        $categorieMateriel->delete();
+
+        return $this->sendSuccess('Catégorie matériel supprimée avec succès.');
     }
 }

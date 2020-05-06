@@ -99,460 +99,7 @@
                             "type": "object"
                         }
                     }
-                },
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ]
-            }
-        },
-        "/categorieApplicatifs": {
-            "get": {
-                "tags": [
-                    "CategorieApplicatif"
-                ],
-                "summary": "Get a listing of the CategorieApplicatifs.",
-                "description": "Get all CategorieApplicatifs",
-                "produces": [
-                    "application/json"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "properties": {
-                                "success": {
-                                    "type": "boolean"
-                                },
-                                "data": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/definitions/CategorieApplicatif"
-                                    }
-                                },
-                                "message": {
-                                    "type": "string"
-                                }
-                            },
-                            "type": "object"
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ]
-            },
-            "post": {
-                "tags": [
-                    "CategorieApplicatif"
-                ],
-                "summary": "Store a newly created CategorieApplicatif in storage",
-                "description": "Store CategorieApplicatif",
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "description": "CategorieApplicatif that should be stored",
-                        "required": false,
-                        "schema": {
-                            "$ref": "#/definitions/CategorieApplicatif"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "properties": {
-                                "success": {
-                                    "type": "boolean"
-                                },
-                                "data": {
-                                    "$ref": "#/definitions/CategorieApplicatif"
-                                },
-                                "message": {
-                                    "type": "string"
-                                }
-                            },
-                            "type": "object"
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ]
-            }
-        },
-        "/categorieApplicatifs/{id}": {
-            "get": {
-                "tags": [
-                    "CategorieApplicatif"
-                ],
-                "summary": "Display the specified CategorieApplicatif",
-                "description": "Get CategorieApplicatif",
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "id of CategorieApplicatif",
-                        "required": true,
-                        "type": "integer"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "properties": {
-                                "success": {
-                                    "type": "boolean"
-                                },
-                                "data": {
-                                    "$ref": "#/definitions/CategorieApplicatif"
-                                },
-                                "message": {
-                                    "type": "string"
-                                }
-                            },
-                            "type": "object"
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ]
-            },
-            "put": {
-                "tags": [
-                    "CategorieApplicatif"
-                ],
-                "summary": "Update the specified CategorieApplicatif in storage",
-                "description": "Update CategorieApplicatif",
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "id of CategorieApplicatif",
-                        "required": true,
-                        "type": "integer"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "description": "CategorieApplicatif that should be updated",
-                        "required": false,
-                        "schema": {
-                            "$ref": "#/definitions/CategorieApplicatif"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "properties": {
-                                "success": {
-                                    "type": "boolean"
-                                },
-                                "data": {
-                                    "$ref": "#/definitions/CategorieApplicatif"
-                                },
-                                "message": {
-                                    "type": "string"
-                                }
-                            },
-                            "type": "object"
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ]
-            },
-            "delete": {
-                "tags": [
-                    "CategorieApplicatif"
-                ],
-                "summary": "Remove the specified CategorieApplicatif from storage",
-                "description": "Delete CategorieApplicatif",
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "id of CategorieApplicatif",
-                        "required": true,
-                        "type": "integer"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "properties": {
-                                "success": {
-                                    "type": "boolean"
-                                },
-                                "data": {
-                                    "type": "string"
-                                },
-                                "message": {
-                                    "type": "string"
-                                }
-                            },
-                            "type": "object"
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ]
-            }
-        },
-        "/categorieMateriels": {
-            "get": {
-                "tags": [
-                    "CategorieMateriel"
-                ],
-                "summary": "Get a listing of the CategorieMateriels.",
-                "description": "Get all CategorieMateriels",
-                "produces": [
-                    "application/json"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "properties": {
-                                "success": {
-                                    "type": "boolean"
-                                },
-                                "data": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/definitions/CategorieMateriel"
-                                    }
-                                },
-                                "message": {
-                                    "type": "string"
-                                }
-                            },
-                            "type": "object"
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ]
-            },
-            "post": {
-                "tags": [
-                    "CategorieMateriel"
-                ],
-                "summary": "Store a newly created CategorieMateriel in storage",
-                "description": "Store CategorieMateriel",
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "description": "CategorieMateriel that should be stored",
-                        "required": false,
-                        "schema": {
-                            "$ref": "#/definitions/CategorieMateriel"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "properties": {
-                                "success": {
-                                    "type": "boolean"
-                                },
-                                "data": {
-                                    "$ref": "#/definitions/CategorieMateriel"
-                                },
-                                "message": {
-                                    "type": "string"
-                                }
-                            },
-                            "type": "object"
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ]
-            }
-        },
-        "/categorieMateriels/{id}": {
-            "get": {
-                "tags": [
-                    "CategorieMateriel"
-                ],
-                "summary": "Display the specified CategorieMateriel",
-                "description": "Get CategorieMateriel",
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "id of CategorieMateriel",
-                        "required": true,
-                        "type": "integer"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "properties": {
-                                "success": {
-                                    "type": "boolean"
-                                },
-                                "data": {
-                                    "$ref": "#/definitions/CategorieMateriel"
-                                },
-                                "message": {
-                                    "type": "string"
-                                }
-                            },
-                            "type": "object"
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ]
-            },
-            "put": {
-                "tags": [
-                    "CategorieMateriel"
-                ],
-                "summary": "Update the specified CategorieMateriel in storage",
-                "description": "Update CategorieMateriel",
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "id of CategorieMateriel",
-                        "required": true,
-                        "type": "integer"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "description": "CategorieMateriel that should be updated",
-                        "required": false,
-                        "schema": {
-                            "$ref": "#/definitions/CategorieMateriel"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "properties": {
-                                "success": {
-                                    "type": "boolean"
-                                },
-                                "data": {
-                                    "$ref": "#/definitions/CategorieMateriel"
-                                },
-                                "message": {
-                                    "type": "string"
-                                }
-                            },
-                            "type": "object"
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ]
-            },
-            "delete": {
-                "tags": [
-                    "CategorieMateriel"
-                ],
-                "summary": "Remove the specified CategorieMateriel from storage",
-                "description": "Delete CategorieMateriel",
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "id of CategorieMateriel",
-                        "required": true,
-                        "type": "integer"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "properties": {
-                                "success": {
-                                    "type": "boolean"
-                                },
-                                "data": {
-                                    "type": "string"
-                                },
-                                "message": {
-                                    "type": "string"
-                                }
-                            },
-                            "type": "object"
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ]
+                }
             }
         },
         "/forgot-password": {
@@ -683,12 +230,7 @@
                             "type": "object"
                         }
                     }
-                },
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ]
+                }
             },
             "post": {
                 "tags": [
@@ -728,12 +270,7 @@
                             "type": "object"
                         }
                     }
-                },
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ]
+                }
             }
         },
         "/tickets/{id}": {
@@ -773,12 +310,7 @@
                             "type": "object"
                         }
                     }
-                },
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ]
+                }
             },
             "put": {
                 "tags": [
@@ -825,12 +357,7 @@
                             "type": "object"
                         }
                     }
-                },
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ]
+                }
             },
             "delete": {
                 "tags": [
@@ -868,12 +395,7 @@
                             "type": "object"
                         }
                     }
-                },
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ]
+                }
             }
         },
         "/users": {
@@ -907,12 +429,7 @@
                             "type": "object"
                         }
                     }
-                },
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ]
+                }
             },
             "post": {
                 "tags": [
@@ -955,7 +472,7 @@
                 },
                 "security": [
                     {
-                        "Bearer": []
+                        "basicAuth": []
                     }
                 ]
             }
@@ -997,12 +514,7 @@
                             "type": "object"
                         }
                     }
-                },
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ]
+                }
             },
             "put": {
                 "tags": [
@@ -1049,12 +561,7 @@
                             "type": "object"
                         }
                     }
-                },
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ]
+                }
             },
             "delete": {
                 "tags": [
@@ -1092,98 +599,11 @@
                             "type": "object"
                         }
                     }
-                },
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ]
+                }
             }
         }
     },
     "definitions": {
-        "CategorieApplicatif": {
-            "required": [
-                "type",
-                "probleme",
-                "description",
-                "solution_file"
-            ],
-            "properties": {
-                "id": {
-                    "description": "id",
-                    "type": "integer",
-                    "format": "int32"
-                },
-                "type": {
-                    "description": "type",
-                    "type": "string"
-                },
-                "probleme": {
-                    "description": "probleme",
-                    "type": "string"
-                },
-                "description": {
-                    "description": "description",
-                    "type": "string"
-                },
-                "solution_file": {
-                    "description": "solution_file",
-                    "type": "string"
-                },
-                "created_at": {
-                    "description": "created_at",
-                    "type": "string",
-                    "format": "date-time"
-                },
-                "updated_at": {
-                    "description": "updated_at",
-                    "type": "string",
-                    "format": "date-time"
-                }
-            }
-        },
-        "CategorieMateriel": {
-            "required": [
-                "objet",
-                "probleme",
-                "description",
-                "solution_file"
-            ],
-            "properties": {
-                "id": {
-                    "description": "id",
-                    "type": "integer",
-                    "format": "int32"
-                },
-                "objet": {
-                    "description": "objet",
-                    "type": "string"
-                },
-                "probleme": {
-                    "description": "probleme",
-                    "type": "string"
-                },
-                "description": {
-                    "description": "description",
-                    "type": "string"
-                },
-                "solution_file": {
-                    "description": "solution_file",
-                    "type": "string"
-                },
-                "created_at": {
-                    "description": "created_at",
-                    "type": "string",
-                    "format": "date-time"
-                },
-                "updated_at": {
-                    "description": "updated_at",
-                    "type": "string",
-                    "format": "date-time"
-                }
-            }
-        },
         "Ticket": {
             "required": [
                 "objet",

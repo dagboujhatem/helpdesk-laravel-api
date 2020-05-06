@@ -35,6 +35,7 @@ class MissionAPIController extends AppBaseController
      *      tags={"Mission"},
      *      description="Get all Missions",
      *      produces={"application/json"},
+     *      security = {{"Bearer": {}}},
      *      @SWG\Response(
      *          response=200,
      *          description="successful operation",
@@ -78,6 +79,7 @@ class MissionAPIController extends AppBaseController
      *      tags={"Mission"},
      *      description="Store Mission",
      *      produces={"application/json"},
+     *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="body",
      *          in="body",
@@ -125,6 +127,7 @@ class MissionAPIController extends AppBaseController
      *      tags={"Mission"},
      *      description="Get Mission",
      *      produces={"application/json"},
+     *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="id",
      *          description="id of Mission",
@@ -176,6 +179,7 @@ class MissionAPIController extends AppBaseController
      *      tags={"Mission"},
      *      description="Update Mission",
      *      produces={"application/json"},
+     *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="id",
      *          description="id of Mission",
@@ -237,6 +241,7 @@ class MissionAPIController extends AppBaseController
      *      tags={"Mission"},
      *      description="Delete Mission",
      *      produces={"application/json"},
+     *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="id",
      *          description="id of Mission",

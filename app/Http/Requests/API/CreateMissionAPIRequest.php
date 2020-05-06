@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\API;
 
-use App\CategorieMateriel;
+use App\Mission;
 use InfyOm\Generator\Request\APIRequest;
 
-class UpdateCategorieMaterielAPIRequest extends APIRequest
+class CreateMissionAPIRequest extends APIRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,6 @@ class UpdateCategorieMaterielAPIRequest extends APIRequest
      */
     public function rules()
     {
-        return [
-            'objet' => 'required|string',
-            'probleme' => 'required|string',
-            'description' => 'required|string',
-            'solution_file' => ''
-        ];
+        return Mission::$rules;
     }
 }

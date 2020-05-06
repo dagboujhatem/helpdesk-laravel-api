@@ -27,4 +27,5 @@ Route::group(['middleware' => 'auth:api'], function()
     Route::resource('tickets', 'TicketAPIController');
     Route::resource('categorieMateriels', 'CategorieMaterielAPIController');
     Route::resource('categorieApplicatifs', 'CategorieApplicatifAPIController');
+    Route::resource('missions', 'MissionAPIController');
 });

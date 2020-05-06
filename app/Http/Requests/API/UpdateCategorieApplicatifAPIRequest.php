@@ -24,8 +24,11 @@ class UpdateCategorieApplicatifAPIRequest extends APIRequest
      */
     public function rules()
     {
-        $rules = CategorieApplicatif::$rules;
-        
-        return $rules;
+        return [
+            'type' => 'required|string',
+            'probleme' => 'required|string',
+            'description' => 'required|string',
+            'solution_file' => ''
+        ];
     }
 }

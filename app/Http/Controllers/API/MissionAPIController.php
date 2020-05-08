@@ -114,7 +114,7 @@ class MissionAPIController extends AppBaseController
 
         $mission = $this->missionRepository->create($input);
 
-        return $this->sendResponse($mission->toArray(), 'Mission  enregistré avec succès.');
+        return $this->sendResponse($mission->toArray(), 'Mission enregistré avec succès.');
     }
 
     /**
@@ -165,7 +165,7 @@ class MissionAPIController extends AppBaseController
             return $this->sendError('Mission introuvable.');
         }
 
-        return $this->sendResponse($mission->toArray(), 'Mission rrécupéré avec succès.');
+        return $this->sendResponse($mission->toArray(), 'Mission récupéré avec succès.');
     }
 
     /**

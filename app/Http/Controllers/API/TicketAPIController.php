@@ -114,7 +114,7 @@ class TicketAPIController extends AppBaseController
 
         $ticket = $this->ticketRepository->create($input);
 
-        return $this->sendResponse($ticket->toArray(), 'Ticket  enregistré avec succès.');
+        return $this->sendResponse($ticket->toArray(), 'Ticket enregistré avec succès.');
     }
 
     /**
@@ -165,7 +165,7 @@ class TicketAPIController extends AppBaseController
             return $this->sendError('Ticket introuvable.');
         }
 
-        return $this->sendResponse($ticket->toArray(), 'Ticket rrécupéré avec succès.');
+        return $this->sendResponse($ticket->toArray(), 'Ticket récupéré avec succès.');
     }
 
     /**
@@ -281,6 +281,6 @@ class TicketAPIController extends AppBaseController
 
         $ticket->delete();
 
-        return $this->sendSuccess('Ticket  a bien été supprimé avec succès.');
+        return $this->sendSuccess('Ticket a bien été supprimé avec succès.');
     }
 }

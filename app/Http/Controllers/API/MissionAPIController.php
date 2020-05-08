@@ -66,7 +66,7 @@ class MissionAPIController extends AppBaseController
             $request->get('limit')
         );
 
-        return $this->sendResponse($missions->toArray(), 'Missions retrieved successfully');
+        return $this->sendResponse($missions->toArray(), 'Missions récupérées avec succès.');
     }
 
     /**
@@ -114,7 +114,7 @@ class MissionAPIController extends AppBaseController
 
         $mission = $this->missionRepository->create($input);
 
-        return $this->sendResponse($mission->toArray(), 'Mission saved successfully');
+        return $this->sendResponse($mission->toArray(), 'Mission  enregistré avec succès.');
     }
 
     /**
@@ -162,10 +162,10 @@ class MissionAPIController extends AppBaseController
         $mission = $this->missionRepository->find($id);
 
         if (empty($mission)) {
-            return $this->sendError('Mission not found');
+            return $this->sendError('Mission introuvable.');
         }
 
-        return $this->sendResponse($mission->toArray(), 'Mission retrieved successfully');
+        return $this->sendResponse($mission->toArray(), 'Mission rrécupéré avec succès.');
     }
 
     /**
@@ -223,11 +223,11 @@ class MissionAPIController extends AppBaseController
         $mission = $this->missionRepository->find($id);
 
         if (empty($mission)) {
-            return $this->sendError('Mission not found');
+            return $this->sendError('Mission introuvable.');
         }
 
         $mission = $this->missionRepository->update($input, $id);
 
-        return $this->sendResponse($mission->toArray(), 'Mission updated successfully');
+        return $this->sendResponse($mission->toArray(), 'Mission mis à jour avec succès.');
     }
 }

@@ -42,4 +42,7 @@ Route::group(['middleware' => 'auth:api'], function()
     Route::apiResource('missionResponses', 'MissionResponseAPIController', [
         'only' => ['store']
     ]);
+    // confirmer mission route
+    // settings routes
+    Route::get('missionResponses/confirmer/{id}', 'MissionResponseAPIController@confirmer');
 });

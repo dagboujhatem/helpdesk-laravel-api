@@ -72,4 +72,20 @@ class MissionResponseAPIController extends AppBaseController
         return $this->sendResponse($missionResponse->toArray(),
             'Réponse de la mission enregistrée avec succès.');
     }
+
+    // confirmer une mission
+    public function confirmer($id)
+    {
+        $missionResponse = $this->missionResponseRepository->find($id);
+
+        if (empty($missionResponse)) {
+            return $this->sendError('La réponse de mission est introuvable.');
+        }
+        // send mail notification here
+
+        // update mission response
+        $updatedMissionResponse = $this->missionResponseRepository->update(['isConfirmed' => true], $id);
+
+        return $this->sendSuccess('La mission confirmée avec succès, un mail est envoyé au fournisseur concerné.');
+    }
 }

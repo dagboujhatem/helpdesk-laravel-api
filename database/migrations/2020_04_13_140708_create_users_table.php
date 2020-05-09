@@ -25,7 +25,7 @@ class CreateUsersTable extends Migration
             $table->text('adresse');
             $table->string('departement');
             $table->string('lieu_de_travail');
-            $table->date('date_d_embauche');
+            $table->string('date_d_embauche');
             $table->string('photo');
             $table->timestamps();
             $table->softDeletes();

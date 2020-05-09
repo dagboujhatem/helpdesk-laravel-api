@@ -120,7 +120,7 @@ abstract class BaseRepository
     {
         $query = $this->allQuery($search, $skip, $limit);
 
-        return $query->get($columns);
+        return $query->orderByDesc('created_at')->get($columns);
     }
 
     /**

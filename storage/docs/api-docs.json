@@ -734,49 +734,6 @@
                         "Bearer": []
                     }
                 ]
-            },
-            "delete": {
-                "tags": [
-                    "Mission"
-                ],
-                "summary": "Remove the specified Mission from storage",
-                "description": "Delete Mission",
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "id of Mission",
-                        "required": true,
-                        "type": "integer"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "properties": {
-                                "success": {
-                                    "type": "boolean"
-                                },
-                                "data": {
-                                    "type": "string"
-                                },
-                                "message": {
-                                    "type": "string"
-                                }
-                            },
-                            "type": "object"
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ]
             }
         },
         "/forgot-password": {

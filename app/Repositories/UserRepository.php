@@ -28,8 +28,7 @@ class UserRepository extends BaseRepository
         'departement',
         'lieu_de_travail',
         'date_d_embauche',
-        'photo',
-        'role'
+        'photo'
     ];
 
     /**
@@ -48,5 +47,11 @@ class UserRepository extends BaseRepository
     public function model()
     {
         return User::class;
+    }
+
+    // get user by email address
+    public function getUserByEmail($email)
+    {
+        return User::where('email', $email)->first();
     }
 }

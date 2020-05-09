@@ -24,13 +24,11 @@ class UpdateUserAPIRequest extends APIRequest
      */
     public function rules()
     {
-        $rules = User::$rules;
-
         return [
             'identifiant' => 'required',
             'nom' => 'required',
             'prenom' => 'required',
-            'email' => 'required|email|max:255|unique:users,email,NULL,id,deleted_at,NULL',
+            'email' => 'required|email|max:255|unique:users,email,'. $this->id .',id',
             'cin' => 'required',
             'telephone' => 'required',
             'adresse' => 'required',

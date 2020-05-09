@@ -139,7 +139,7 @@ class User extends Authenticatable
         'adresse' => 'string',
         'departement' => 'string',
         'lieu_de_travail' => 'string',
-        'date_d_embauche' => 'date',
+        'date_d_embauche' => 'string',
         'photo' => 'string',
     ];
 

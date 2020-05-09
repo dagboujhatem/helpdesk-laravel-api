@@ -31,8 +31,8 @@ class UsersTableSeeder extends Seeder
                 'adresse' => $faker->streetAddress,
                 'departement' => 'Monétique',
                 'lieu_de_travail' => 'Siège',
-                'date_d_embauche' => now(),
-                'photo' => $faker->unique()->imageUrl($width = 50, $height = 50 ,'people'),
+                'date_d_embauche' => $faker->date($format = 'Y-m-d', $max = 'now'),
+                'photo' => 'assets/img/avatars/6.jpg',
                 ])->assignRole('Administrateur');
 
 
@@ -48,8 +48,8 @@ class UsersTableSeeder extends Seeder
                 'adresse' => $faker->streetAddress,
                 'departement' => 'Monétique',
                 'lieu_de_travail' => 'Agence',
-                'date_d_embauche' => now(),
-                'photo' => $faker->unique()->imageUrl($width = 50, $height = 50 ,'people'),
+                'date_d_embauche' => $faker->date($format = 'Y-m-d', $max = 'now'),
+                'photo' => 'assets/img/avatars/8.jpg',
                 ])->assignRole('Informaticien');
 
                 // insert a default Personnel
@@ -64,8 +64,8 @@ class UsersTableSeeder extends Seeder
                 'adresse' => $faker->streetAddress,
                 'departement' => 'Monétique',
                 'lieu_de_travail' => 'Siège',
-                'date_d_embauche' => now(),
-                'photo' => $faker->unique()->imageUrl($width = 50, $height = 50 ,'people'),
+                'date_d_embauche' => $faker->date($format = 'Y-m-d', $max = 'now'),
+                'photo' => 'assets/img/avatars/3.jpg',
                 ])->assignRole('Personnel');
 
                 // insert a default Fournisseur
@@ -80,8 +80,8 @@ class UsersTableSeeder extends Seeder
                 'adresse' => $faker->streetAddress,
                 'departement' => 'Monétique',
                 'lieu_de_travail' => 'Agence',
-                'date_d_embauche' => now(),
-                'photo' => $faker->unique()->imageUrl($width = 50, $height = 50 ,'people'),
+                'date_d_embauche' => $faker->date($format = 'Y-m-d', $max = 'now'),
+                'photo' => 'assets/img/avatars/2.jpg',
                 ])->assignRole('Fournisseur');
 
             }else

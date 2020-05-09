@@ -265,7 +265,6 @@ class UserAPIController extends AppBaseController
                 // delete the photo
                 Storage::delete('avatars/'.$filename);
             }
-            $user->delete();
         }
 
         $user = $this->userRepository->update($input, $id);

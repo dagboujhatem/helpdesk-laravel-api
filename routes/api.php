@@ -25,15 +25,21 @@ Route::group(['middleware' => 'auth:api'], function()
     // logout route
     Route::get('users/logout', 'AuthController@logout');
     // users routes
-    Route::resource('users', 'UserAPIController');
+    Route::apiResource('users', 'UserAPIController');
     // settings routes
     Route::get('users/getInfos/{email}', 'SettingsController@getUserInfoByEmailAddress');
     Route::put('users/saveInfos/{id}', 'SettingsController@saveSettings');
     // tickets routes
-    Route::resource('tickets', 'TicketAPIController');
+    Route::apiResource('tickets', 'TicketAPIController');
     // catégories routes
-    Route::resource('categorieMateriels', 'CategorieMaterielAPIController');
-    Route::resource('categorieApplicatifs', 'CategorieApplicatifAPIController');
+    Route::apiResource('categorieMateriels', 'CategorieMaterielAPIController');
+    Route::apiResource('categorieApplicatifs', 'CategorieApplicatifAPIController');
     // missions routes
-    Route::resource('missions', 'MissionAPIController');
+    Route::apiResource('missions', 'MissionAPIController', [
+        'except' => ['destroy']
+    ]);
+    // mission response route
+    Route::apiResource('missionResponses', 'MissionResponseAPIController', [
+        'only' => ['store']
+    ]);
 });

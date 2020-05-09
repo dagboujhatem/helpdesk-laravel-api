@@ -65,6 +65,15 @@ class MissionAPIController extends AppBaseController
             $request->get('skip'),
             $request->get('limit')
         );
+        foreach ($missions as $mission) {
+            $missionResponse = $mission->missionResponse;
+            $mission['hasResponse'] = $missionResponse != null;
+            if ($missionResponse) {
+                $mission['isConfirmed'] = $missionResponse->isConfirmed;
+            } else {
+                $mission['isConfirmed'] = false;
+            }
+        }
 
         return $this->sendResponse($missions->toArray(), 'Missions récupérées avec succès.');
     }
@@ -164,6 +173,8 @@ class MissionAPIController extends AppBaseController
         if (empty($mission)) {
             return $this->sendError('Mission introuvable.');
         }
+
+        $mission->missionResponse;
 
         return $this->sendResponse($mission->toArray(), 'Mission récupéré avec succès.');
     }

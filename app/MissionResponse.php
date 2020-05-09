@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
- *      definition="Mission",
- *      required={"nom", "fonction", "date_debut", "date_fin", "mission", "description"},
+ *      definition="MissionResponse",
+ *      required={"nom", "fonction", "mission", "date_debut", "date_fin", "description"},
  *      @SWG\Property(
  *          property="id",
  *          description="id",
@@ -21,8 +21,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *          type="string"
  *      ),
  *      @SWG\Property(
- *          property="fonction",
- *          description="fonction",
+ *          property="collaborateurs",
+ *          description="collaborateurs",
+ *          type="string"
+ *      ),
+ *      @SWG\Property(
+ *          property="mission",
+ *          description="mission",
  *          type="string"
  *      ),
  *      @SWG\Property(
@@ -36,14 +41,21 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *          type="string"
  *      ),
  *      @SWG\Property(
- *          property="mission",
- *          description="mission",
+ *          property="reponse",
+ *          description="reponse",
  *          type="string"
  *      ),
+ *     @SWG\Property(
+ *          property="isConfirmed",
+ *          description="isConfirmed",
+ *          type="boolean",
+ *          default=false
+ *      ),
  *      @SWG\Property(
- *          property="description",
- *          description="description",
- *          type="string"
+ *          property="mission_id",
+ *          description="mission_id",
+ *          type="integer",
+ *          format="int32"
  *      ),
  *      @SWG\Property(
  *          property="created_at",
@@ -59,11 +71,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *      )
  * )
  */
-class Mission extends Model
+class MissionResponse extends Model
 {
     use SoftDeletes;
 
-    public $table = 'missions';
+    public $table = 'mission_responses';
 
 
     protected $dates = ['deleted_at'];
@@ -72,11 +84,13 @@ class Mission extends Model
 
     public $fillable = [
         'nom',
-        'fonction',
+        'collaborateurs',
+        'mission',
         'date_debut',
         'date_fin',
-        'mission',
-        'description'
+        'reponse',
+        'isConfirmed',
+        'mission_id'
     ];
 
     /**
@@ -87,11 +101,12 @@ class Mission extends Model
     protected $casts = [
         'id' => 'integer',
         'nom' => 'string',
-        'fonction' => 'string',
+        'collaborateurs' => 'string',
+        'mission' => 'string',
         'date_debut' => 'string',
         'date_fin' => 'string',
-        'mission' => 'string',
-        'description' => 'string'
+        'reponse' => 'string',
+        'mission_id' => 'integer'
     ];
 
     /**
@@ -101,18 +116,19 @@ class Mission extends Model
      */
     public static $rules = [
         'nom' => 'required',
-        'fonction' => 'required',
+        'collaborateurs' => 'required',
+        'mission' => 'required',
         'date_debut' => 'required',
         'date_fin' => 'required',
-        'mission' => 'required',
-        'description' => 'required'
+        'reponse' => 'required',
+        'mission_id' => 'required'
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      **/
-    public function missionResponse()
+    public function mission()
     {
-        return $this->hasOne(\App\MissionResponse::class, 'mission_id', 'id');
+        return $this->belongsTo(\App\Mission::class, 'mission_id');
     }
 }

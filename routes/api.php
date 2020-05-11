@@ -29,8 +29,6 @@ Route::group(['middleware' => 'auth:api'], function()
     // settings routes
     Route::get('users/getInfos/{email}', 'SettingsController@getUserInfoByEmailAddress');
     Route::put('users/saveInfos/{id}', 'SettingsController@saveSettings');
-    // tickets routes
-    Route::apiResource('tickets', 'TicketAPIController');
     // catégories routes
     Route::apiResource('categorieMateriels', 'CategorieMaterielAPIController');
     Route::apiResource('categorieApplicatifs', 'CategorieApplicatifAPIController');
@@ -43,6 +41,11 @@ Route::group(['middleware' => 'auth:api'], function()
         'only' => ['store']
     ]);
     // confirmer mission route
-    // settings routes
     Route::get('missionResponses/confirmer/{id}', 'MissionResponseAPIController@confirmer');
+    // tickets routes
+    Route::apiResource('tickets', 'TicketAPIController', [
+        'except' => ['destroy']
+    ]);
+    // affectation du priorité
+    Route::put('tickets/priorite/{id}', 'TicketAPIController@priorite');
 });

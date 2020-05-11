@@ -48,7 +48,19 @@ class MissionAPIController extends AppBaseController
      *              @SWG\Property(
      *                  property="data",
      *                  type="array",
-     *                  @SWG\Items(ref="#/definitions/Mission")
+     *                  @SWG\Items(
+     *                      ref="#/definitions/Mission",
+     *                      @SWG\Property(
+     *                          property="hasResponse",
+     *                          description="hasResponse",
+     *                          type="boolean"
+     *                      ),
+     *                      @SWG\Property(
+     *                          property="isConfirmed",
+     *                          description="isConfirmed",
+     *                          type="boolean"
+     *                      )
+     *                  )
      *              ),
      *              @SWG\Property(
      *                  property="message",

@@ -4,10 +4,12 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Requests\API\CreateTicketAPIRequest;
 use App\Http\Requests\API\UpdateTicketAPIRequest;
+use App\Http\Requests\API\UpdateTicketPrioriteAPIRequest;
 use App\Ticket;
 use App\Repositories\TicketRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
+use Illuminate\Support\Facades\Storage;
 use Response;
 
 /**
@@ -66,7 +68,7 @@ class TicketAPIController extends AppBaseController
             $request->get('limit')
         );
 
-        return $this->sendResponse($tickets->toArray(), 'Tickets retrieved successfully');
+        return $this->sendResponse($tickets->toArray(), 'Tickets récupérées avec succès.');
     }
 
     /**
@@ -111,6 +113,12 @@ class TicketAPIController extends AppBaseController
     public function store(CreateTicketAPIRequest $request)
     {
         $input = $request->all();
+
+        // upload file
+        if($request->hasFile('file')){
+            $path = $request->file('file')->store('tickets');
+            $input['file'] = Storage::url($path);
+        }
 
         $ticket = $this->ticketRepository->create($input);
 
@@ -226,6 +234,20 @@ class TicketAPIController extends AppBaseController
             return $this->sendError('Ticket introuvable.');
         }
 
+        // upload the new file if exist
+        if($request->hasFile('file')){
+            $path = $request->file('file')->store('tickets');
+            $input['file'] = Storage::url($path);
+            // delete old file if exist
+            $filename = basename($ticket->file);
+            $exists = Storage::exists('tickets/'.$filename);
+            if($exists)
+            {
+                // delete the old file
+                Storage::delete('tickets/'.$filename);
+            }
+        }
+
         $ticket = $this->ticketRepository->update($input, $id);
 
         return $this->sendResponse($ticket->toArray(), 'Ticket mis à jour avec succès.');
@@ -233,13 +255,14 @@ class TicketAPIController extends AppBaseController
 
     /**
      * @param int $id
+     * @param UpdateTicketAPIRequest $request
      * @return Response
      *
-     * @SWG\Delete(
-     *      path="/tickets/{id}",
-     *      summary="Remove the specified Ticket from storage",
+     * @SWG\Put(
+     *      path="/tickets/priorite/{id}",
+     *      summary="Update the priority of specified Ticket in storage",
      *      tags={"Ticket"},
-     *      description="Delete Ticket",
+     *      description="Update priorite Ticket",
      *      produces={"application/json"},
      *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
@@ -248,6 +271,19 @@ class TicketAPIController extends AppBaseController
      *          type="integer",
      *          required=true,
      *          in="path"
+     *      ),
+     *      @SWG\Parameter(
+     *          name="body",
+     *          in="body",
+     *          description="Priority string that should be updated",
+     *          required=true,
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="priorite",
+     *                  description="priorite",
+     *                  type="string"
+     *              )
+     *          )
      *      ),
      *      @SWG\Response(
      *          response=200,
@@ -260,7 +296,7 @@ class TicketAPIController extends AppBaseController
      *              ),
      *              @SWG\Property(
      *                  property="data",
-     *                  type="string"
+     *                  ref="#/definitions/Ticket"
      *              ),
      *              @SWG\Property(
      *                  property="message",
@@ -270,17 +306,15 @@ class TicketAPIController extends AppBaseController
      *      )
      * )
      */
-    public function destroy($id)
+    public function priorite($id, UpdateTicketPrioriteAPIRequest $request)
     {
+        $input = $request->all();
+
         /** @var Ticket $ticket */
         $ticket = $this->ticketRepository->find($id);
 
-        if (empty($ticket)) {
-            return $this->sendError('Ticket introuvable.');
-        }
+        $ticket = $this->ticketRepository->update($input, $id);
 
-        $ticket->delete();
-
-        return $this->sendSuccess('Ticket a bien été supprimé avec succès.');
+        return $this->sendResponse($ticket->toArray(), 'Affectation du priorité avec succès.');
     }
 }

@@ -24,8 +24,17 @@ class UpdateTicketAPIRequest extends APIRequest
      */
     public function rules()
     {
-        $rules = Ticket::$rules;
-        
-        return $rules;
+        return [
+            'objet' => 'required',
+            'element' => 'required',
+            'nom' => 'required',
+            'date_d_ouverture' => 'required',
+            'date_d_echeance' => 'required',
+            'categorie' => 'required',
+            'impact' => 'required',
+            'etat' => 'required',
+            'lieu' => 'required',
+            'description' => 'required',
+        ];
     }
 }

@@ -73,7 +73,42 @@ class MissionResponseAPIController extends AppBaseController
             'Réponse de la mission enregistrée avec succès.');
     }
 
-    // confirmer une mission
+
+    /**
+     * @param CreateMissionResponseAPIRequest $request
+     * @return Response
+     *
+     * @SWG\Get(
+     *      path="/missionResponses/confirmer/{id}",
+     *      summary="Confirm the specified MissionResponse in storage",
+     *      tags={"MissionResponse"},
+     *      description="Confirm MissionResponse",
+     *      produces={"application/json"},
+     *      security = {{"Bearer": {}}},
+     *      @SWG\Parameter(
+     *          name="id",
+     *          description="id of MissionResponse",
+     *          type="integer",
+     *          required=true,
+     *          in="path"
+     *      ),
+     *      @SWG\Response(
+     *          response=200,
+     *          description="successful operation",
+     *          @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(
+     *                  property="success",
+     *                  type="boolean"
+     *              ),
+     *              @SWG\Property(
+     *                  property="message",
+     *                  type="string"
+     *              )
+     *          )
+     *      )
+     * )
+     */
     public function confirmer($id)
     {
         $missionResponse = $this->missionResponseRepository->find($id);

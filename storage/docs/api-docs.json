@@ -783,6 +783,48 @@
                 ]
             }
         },
+        "/missionResponses/confirmer/{id}": {
+            "get": {
+                "tags": [
+                    "MissionResponse"
+                ],
+                "summary": "Confirm the specified MissionResponse in storage",
+                "description": "Confirm MissionResponse",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of MissionResponse",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
         "/forgot-password": {
             "post": {
                 "tags": [
@@ -1158,13 +1200,15 @@
                         "Bearer": []
                     }
                 ]
-            },
-            "delete": {
+            }
+        },
+        "/tickets/priorite/{id}": {
+            "put": {
                 "tags": [
                     "Ticket"
                 ],
-                "summary": "Remove the specified Ticket from storage",
-                "description": "Delete Ticket",
+                "summary": "Update the priority of specified Ticket in storage",
+                "description": "Update priorite Ticket",
                 "produces": [
                     "application/json"
                 ],
@@ -1175,6 +1219,20 @@
                         "description": "id of Ticket",
                         "required": true,
                         "type": "integer"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Priority string that should be updated",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "priorite": {
+                                    "description": "priorite",
+                                    "type": "string"
+                                }
+                            }
+                        }
                     }
                 ],
                 "responses": {
@@ -1186,7 +1244,7 @@
                                     "type": "boolean"
                                 },
                                 "data": {
-                                    "type": "string"
+                                    "$ref": "#/definitions/Ticket"
                                 },
                                 "message": {
                                     "type": "string"
@@ -1565,11 +1623,13 @@
         "MissionResponse": {
             "required": [
                 "nom",
-                "fonction",
+                "collaborateurs",
                 "mission",
                 "date_debut",
                 "date_fin",
-                "description"
+                "reponse",
+                "isConfirmed",
+                "mission_id"
             ],
             "properties": {
                 "id": {

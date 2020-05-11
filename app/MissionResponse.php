@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @SWG\Definition(
  *      definition="MissionResponse",
- *      required={"nom", "fonction", "mission", "date_debut", "date_fin", "description"},
+ *      required={"nom", "collaborateurs", "mission", "date_debut", "date_fin", "reponse", "isConfirmed", "mission_id"},
  *      @SWG\Property(
  *          property="id",
  *          description="id",

@@ -65,7 +65,7 @@ class TicketResponseAPIController extends AppBaseController
             $request->get('limit')
         );
 
-        return $this->sendResponse($ticketResponses->toArray(), 'Ticket Responses retrieved successfully');
+        return $this->sendResponse($ticketResponses->toArray(), 'Les réponses des tickets récupérées avec succès.');
     }
 
     /**
@@ -112,7 +112,7 @@ class TicketResponseAPIController extends AppBaseController
 
         $ticketResponse = $this->ticketResponseRepository->create($input);
 
-        return $this->sendResponse($ticketResponse->toArray(), 'Ticket Response saved successfully');
+        return $this->sendResponse($ticketResponse->toArray(), 'Réponse envoyée avec succès');
     }
 
     /**
@@ -159,10 +159,10 @@ class TicketResponseAPIController extends AppBaseController
         $ticketResponse = $this->ticketResponseRepository->find($id);
 
         if (empty($ticketResponse)) {
-            return $this->sendError('Ticket Response not found');
+            return $this->sendError('Réponse non trouvée.');
         }
 
-        return $this->sendResponse($ticketResponse->toArray(), 'Ticket Response retrieved successfully');
+        return $this->sendResponse($ticketResponse->toArray(), 'La réponse de ticket récupérée avec succès.');
     }
 
     /**
@@ -219,63 +219,14 @@ class TicketResponseAPIController extends AppBaseController
         $ticketResponse = $this->ticketResponseRepository->find($id);
 
         if (empty($ticketResponse)) {
-            return $this->sendError('Ticket Response not found');
+            return $this->sendError(' Réponse non trouvée.');
         }
 
         $ticketResponse = $this->ticketResponseRepository->update($input, $id);
 
-        return $this->sendResponse($ticketResponse->toArray(), 'TicketResponse updated successfully');
+        return $this->sendResponse($ticketResponse->toArray(), 'Réponse mis à jour avec succès');
     }
 
-    /**
-     * @param int $id
-     * @return Response
-     *
-     * @SWG\Delete(
-     *      path="/ticketResponses/{id}",
-     *      summary="Remove the specified TicketResponse from storage",
-     *      tags={"TicketResponse"},
-     *      description="Delete TicketResponse",
-     *      produces={"application/json"},
-     *      @SWG\Parameter(
-     *          name="id",
-     *          description="id of TicketResponse",
-     *          type="integer",
-     *          required=true,
-     *          in="path"
-     *      ),
-     *      @SWG\Response(
-     *          response=200,
-     *          description="successful operation",
-     *          @SWG\Schema(
-     *              type="object",
-     *              @SWG\Property(
-     *                  property="success",
-     *                  type="boolean"
-     *              ),
-     *              @SWG\Property(
-     *                  property="data",
-     *                  type="string"
-     *              ),
-     *              @SWG\Property(
-     *                  property="message",
-     *                  type="string"
-     *              )
-     *          )
-     *      )
-     * )
-     */
-    public function destroy($id)
-    {
-        /** @var TicketResponse $ticketResponse */
-        $ticketResponse = $this->ticketResponseRepository->find($id);
-
-        if (empty($ticketResponse)) {
-            return $this->sendError('Ticket Response not found');
-        }
-
-        $ticketResponse->delete();
-
-        return $this->sendSuccess('Ticket Response deleted successfully');
-    }
+  
+   
 }

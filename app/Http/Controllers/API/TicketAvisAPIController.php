@@ -65,7 +65,7 @@ class TicketAvisAPIController extends AppBaseController
             $request->get('limit')
         );
 
-        return $this->sendResponse($ticketAvis->toArray(), 'Ticket Avis retrieved successfully');
+        return $this->sendResponse($ticketAvis->toArray(), 'Avis récupérés avec succès.');
     }
 
     /**
@@ -112,7 +112,7 @@ class TicketAvisAPIController extends AppBaseController
 
         $ticketAvis = $this->ticketAvisRepository->create($input);
 
-        return $this->sendResponse($ticketAvis->toArray(), 'Ticket Avis saved successfully');
+        return $this->sendResponse($ticketAvis->toArray(), ' Avis  a été ajouté avec succès');
     }
 
     /**
@@ -159,123 +159,11 @@ class TicketAvisAPIController extends AppBaseController
         $ticketAvis = $this->ticketAvisRepository->find($id);
 
         if (empty($ticketAvis)) {
-            return $this->sendError('Ticket Avis not found');
+            return $this->sendError(' Avis non trouvé.');
         }
 
-        return $this->sendResponse($ticketAvis->toArray(), 'Ticket Avis retrieved successfully');
+        return $this->sendResponse($ticketAvis->toArray(), 'Avis récupérés avec succès.);
     }
 
-    /**
-     * @param int $id
-     * @param UpdateTicketAvisAPIRequest $request
-     * @return Response
-     *
-     * @SWG\Put(
-     *      path="/ticketAvis/{id}",
-     *      summary="Update the specified TicketAvis in storage",
-     *      tags={"TicketAvis"},
-     *      description="Update TicketAvis",
-     *      produces={"application/json"},
-     *      @SWG\Parameter(
-     *          name="id",
-     *          description="id of TicketAvis",
-     *          type="integer",
-     *          required=true,
-     *          in="path"
-     *      ),
-     *      @SWG\Parameter(
-     *          name="body",
-     *          in="body",
-     *          description="TicketAvis that should be updated",
-     *          required=false,
-     *          @SWG\Schema(ref="#/definitions/TicketAvis")
-     *      ),
-     *      @SWG\Response(
-     *          response=200,
-     *          description="successful operation",
-     *          @SWG\Schema(
-     *              type="object",
-     *              @SWG\Property(
-     *                  property="success",
-     *                  type="boolean"
-     *              ),
-     *              @SWG\Property(
-     *                  property="data",
-     *                  ref="#/definitions/TicketAvis"
-     *              ),
-     *              @SWG\Property(
-     *                  property="message",
-     *                  type="string"
-     *              )
-     *          )
-     *      )
-     * )
-     */
-    public function update($id, UpdateTicketAvisAPIRequest $request)
-    {
-        $input = $request->all();
-
-        /** @var TicketAvis $ticketAvis */
-        $ticketAvis = $this->ticketAvisRepository->find($id);
-
-        if (empty($ticketAvis)) {
-            return $this->sendError('Ticket Avis not found');
-        }
-
-        $ticketAvis = $this->ticketAvisRepository->update($input, $id);
-
-        return $this->sendResponse($ticketAvis->toArray(), 'TicketAvis updated successfully');
-    }
-
-    /**
-     * @param int $id
-     * @return Response
-     *
-     * @SWG\Delete(
-     *      path="/ticketAvis/{id}",
-     *      summary="Remove the specified TicketAvis from storage",
-     *      tags={"TicketAvis"},
-     *      description="Delete TicketAvis",
-     *      produces={"application/json"},
-     *      @SWG\Parameter(
-     *          name="id",
-     *          description="id of TicketAvis",
-     *          type="integer",
-     *          required=true,
-     *          in="path"
-     *      ),
-     *      @SWG\Response(
-     *          response=200,
-     *          description="successful operation",
-     *          @SWG\Schema(
-     *              type="object",
-     *              @SWG\Property(
-     *                  property="success",
-     *                  type="boolean"
-     *              ),
-     *              @SWG\Property(
-     *                  property="data",
-     *                  type="string"
-     *              ),
-     *              @SWG\Property(
-     *                  property="message",
-     *                  type="string"
-     *              )
-     *          )
-     *      )
-     * )
-     */
-    public function destroy($id)
-    {
-        /** @var TicketAvis $ticketAvis */
-        $ticketAvis = $this->ticketAvisRepository->find($id);
-
-        if (empty($ticketAvis)) {
-            return $this->sendError('Ticket Avis not found');
-        }
-
-        $ticketAvis->delete();
-
-        return $this->sendSuccess('Ticket Avis deleted successfully');
-    }
+   
 }

@@ -49,3 +49,8 @@ Route::group(['middleware' => 'auth:api'], function()
     // affectation du priorité
     Route::put('tickets/priorite/{id}', 'TicketAPIController@priorite');
 });
+
+
+Route::resource('ticket_avis', 'TicketAvisAPIController');
+
+Route::resource('ticket_responses', 'TicketResponseAPIController');

@@ -157,5 +157,11 @@ class Ticket extends Model
         'file' => 'required',
     ];
 
-
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     **/
+    public function avis()
+    {
+        return $this->hasOne(\App\TicketAvis::class, 'ticket_id', 'id');
+    }
 }

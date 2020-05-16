@@ -68,6 +68,13 @@ class TicketAPIController extends AppBaseController
             $request->get('limit')
         );
 
+        // pour chacune des tickets
+        foreach ($tickets as $ticket) {
+            // recuperer l'avis de cette ticket
+            $avis = $ticket->avis;
+            $ticket['hasAvis'] = $avis != null;
+        }
+
         return $this->sendResponse($tickets->toArray(), 'Tickets récupérées avec succès.');
     }
 

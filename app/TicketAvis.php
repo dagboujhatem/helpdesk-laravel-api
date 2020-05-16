@@ -50,7 +50,7 @@ class TicketAvis extends Model
     use SoftDeletes;
 
     public $table = 'ticket_avis';
-    
+
 
     protected $dates = ['deleted_at'];
 
@@ -85,5 +85,12 @@ class TicketAvis extends Model
         'ticket_id' => 'required'
     ];
 
-    
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     **/
+    public function ticket()
+    {
+        return $this->belongsTo(\App\Ticket::class, 'ticket_id');
+    }
+
 }

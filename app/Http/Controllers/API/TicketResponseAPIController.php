@@ -35,6 +35,7 @@ class TicketResponseAPIController extends AppBaseController
      *      tags={"TicketResponse"},
      *      description="Get all TicketResponses",
      *      produces={"application/json"},
+     *      security = {{"Bearer": {}}},
      *      @SWG\Response(
      *          response=200,
      *          description="successful operation",
@@ -65,7 +66,8 @@ class TicketResponseAPIController extends AppBaseController
             $request->get('limit')
         );
 
-        return $this->sendResponse($ticketResponses->toArray(), 'Les réponses des tickets récupérées avec succès.');
+        return $this->sendResponse($ticketResponses->toArray(),
+            'Les réponses des tickets récupérées avec succès.');
     }
 
     /**
@@ -78,6 +80,7 @@ class TicketResponseAPIController extends AppBaseController
      *      tags={"TicketResponse"},
      *      description="Store TicketResponse",
      *      produces={"application/json"},
+     *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="body",
      *          in="body",
@@ -112,7 +115,8 @@ class TicketResponseAPIController extends AppBaseController
 
         $ticketResponse = $this->ticketResponseRepository->create($input);
 
-        return $this->sendResponse($ticketResponse->toArray(), 'Réponse envoyée avec succès');
+        return $this->sendResponse($ticketResponse->toArray(),
+            'Réponse envoyée avec succès');
     }
 
     /**
@@ -125,6 +129,7 @@ class TicketResponseAPIController extends AppBaseController
      *      tags={"TicketResponse"},
      *      description="Get TicketResponse",
      *      produces={"application/json"},
+     *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="id",
      *          description="id of TicketResponse",
@@ -162,7 +167,8 @@ class TicketResponseAPIController extends AppBaseController
             return $this->sendError('Réponse non trouvée.');
         }
 
-        return $this->sendResponse($ticketResponse->toArray(), 'La réponse de ticket récupérée avec succès.');
+        return $this->sendResponse($ticketResponse->toArray(),
+            'La réponse de ticket récupérée avec succès.');
     }
 
     /**
@@ -176,6 +182,7 @@ class TicketResponseAPIController extends AppBaseController
      *      tags={"TicketResponse"},
      *      description="Update TicketResponse",
      *      produces={"application/json"},
+     *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="id",
      *          description="id of TicketResponse",
@@ -219,14 +226,15 @@ class TicketResponseAPIController extends AppBaseController
         $ticketResponse = $this->ticketResponseRepository->find($id);
 
         if (empty($ticketResponse)) {
-            return $this->sendError(' Réponse non trouvée.');
+            return $this->sendError('Réponse non trouvée.');
         }
 
         $ticketResponse = $this->ticketResponseRepository->update($input, $id);
 
-        return $this->sendResponse($ticketResponse->toArray(), 'Réponse mis à jour avec succès');
+        return $this->sendResponse($ticketResponse->toArray(),
+            'Réponse mis à jour avec succès');
     }
 
-  
-   
+
+
 }

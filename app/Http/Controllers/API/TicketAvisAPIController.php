@@ -35,6 +35,7 @@ class TicketAvisAPIController extends AppBaseController
      *      tags={"TicketAvis"},
      *      description="Get all TicketAvis",
      *      produces={"application/json"},
+     *      security = {{"Bearer": {}}},
      *      @SWG\Response(
      *          response=200,
      *          description="successful operation",
@@ -64,8 +65,14 @@ class TicketAvisAPIController extends AppBaseController
             $request->get('skip'),
             $request->get('limit')
         );
+        // pour chacune des avis
+        foreach ($ticketAvis as $avis) {
+            // recuperer le ticket de cette avis
+            $avis = $avis->ticket;
+        }
 
-        return $this->sendResponse($ticketAvis->toArray(), 'Avis récupérés avec succès.');
+        return $this->sendResponse($ticketAvis->toArray(),
+            'Avis récupérés avec succès.');
     }
 
     /**
@@ -78,6 +85,7 @@ class TicketAvisAPIController extends AppBaseController
      *      tags={"TicketAvis"},
      *      description="Store TicketAvis",
      *      produces={"application/json"},
+     *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="body",
      *          in="body",
@@ -112,7 +120,8 @@ class TicketAvisAPIController extends AppBaseController
 
         $ticketAvis = $this->ticketAvisRepository->create($input);
 
-        return $this->sendResponse($ticketAvis->toArray(), ' Avis  a été ajouté avec succès');
+        return $this->sendResponse($ticketAvis->toArray(),
+            'Avis a été ajouté avec succès.');
     }
 
     /**
@@ -125,6 +134,7 @@ class TicketAvisAPIController extends AppBaseController
      *      tags={"TicketAvis"},
      *      description="Get TicketAvis",
      *      produces={"application/json"},
+     *      security = {{"Bearer": {}}},
      *      @SWG\Parameter(
      *          name="id",
      *          description="id of TicketAvis",
@@ -159,11 +169,12 @@ class TicketAvisAPIController extends AppBaseController
         $ticketAvis = $this->ticketAvisRepository->find($id);
 
         if (empty($ticketAvis)) {
-            return $this->sendError(' Avis non trouvé.');
+            return $this->sendError('Avis non trouvé.');
         }
+        // récupérer le ticket de cette avis
+        $ticketAvis->ticket;
 
-        return $this->sendResponse($ticketAvis->toArray(), 'Avis récupérés avec succès.);
+        return $this->sendResponse($ticketAvis->toArray(),
+            'Avis récupéré avec succès.');
     }
-
-   
 }

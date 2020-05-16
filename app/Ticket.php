@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @SWG\Definition(
  *      definition="Ticket",
- *      required={"objet", "element", "nom", "date_d_ouverture", "date_d_echeance", "categorie", "impact", "etat", "lieu", "description", "photo", "priorite"},
+ *      required={"objet", "element", "nom", "date_d_ouverture", "date_d_echeance", "categorie", "impact", "etat", "lieu", "description", "photo", "priorite", "send_to_fournisseur"},
  *      @SWG\Property(
  *          property="id",
  *          description="id",
@@ -75,6 +75,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *          description="priorite",
  *          type="string"
  *      ),
+ *     @SWG\Property(
+ *          property="send_to_fournisseur",
+ *          description="send_to_fournisseur",
+ *          type="boolean"
+ *      ),
  *      @SWG\Property(
  *          property="created_at",
  *          description="created_at",
@@ -115,7 +120,11 @@ class Ticket extends Model
         'commentaire',
         'description',
         'file',
-        'priorite'
+        'priorite',
+        'send_to_fournisseur',
+        'nouvelle_anomalie',
+        'ticket_status',
+        'ticket_isRelanced',
     ];
 
     /**
@@ -136,6 +145,10 @@ class Ticket extends Model
         'lieu' => 'string',
         'description' => 'string',
         'file' => 'string',
+        'send_to_fournisseur' => 'boolean',
+        'nouvelle_anomalie' => 'string',
+        'ticket_status' => 'boolean',
+        'ticket_isRelanced' => 'boolean',
     ];
 
     /**
@@ -163,5 +176,13 @@ class Ticket extends Model
     public function avis()
     {
         return $this->hasOne(\App\TicketAvis::class, 'ticket_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     **/
+    public function reponse()
+    {
+        return $this->hasOne(\App\TicketResponse::class, 'ticket_id', 'id');
     }
 }

@@ -55,7 +55,7 @@ class TicketResponse extends Model
     use SoftDeletes;
 
     public $table = 'ticket_responses';
-    
+
 
     protected $dates = ['deleted_at'];
 
@@ -93,5 +93,12 @@ class TicketResponse extends Model
         'ticket_id' => 'required'
     ];
 
-    
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     **/
+    public function ticket()
+    {
+        return $this->belongsTo(\App\Ticket::class, 'ticket_id');
+    }
 }

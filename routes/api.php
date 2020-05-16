@@ -46,6 +46,8 @@ Route::group(['middleware' => 'auth:api'], function()
     Route::apiResource('tickets', 'TicketAPIController', [
         'except' => ['destroy']
     ]);
+    // relancer ticket
+    Route::post('tickets/relancer/{id}', 'TicketAPIController@relancer');
     // affectation du priorité
     Route::put('tickets/priorite/{id}', 'TicketAPIController@priorite');
     // reponse à un ticket

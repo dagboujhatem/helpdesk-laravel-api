@@ -73,6 +73,10 @@ class TicketAPIController extends AppBaseController
             // recuperer l'avis de cette ticket
             $avis = $ticket->avis;
             $ticket['hasAvis'] = $avis != null;
+
+            // recuperer la réponse de chaque ticket
+            $response = $ticket->reponse;
+            $ticket['hasResponse'] = $response != null;
         }
 
         return $this->sendResponse($tickets->toArray(), 'Tickets récupérées avec succès.');
@@ -323,5 +327,55 @@ class TicketAPIController extends AppBaseController
         $ticket = $this->ticketRepository->update($input, $id);
 
         return $this->sendResponse($ticket->toArray(), 'Affectation du priorité avec succès.');
+    }
+
+
+    // relancer un ticket
+    public function relancer($id, Request $request)
+    {
+        $input = $request->all();
+
+        /** @var Ticket $ticket */
+        $ticket = $this->ticketRepository->find($id);
+
+        if (empty($ticket)) {
+            return $this->sendError('Ticket introuvable.');
+        }
+
+
+        // upload the new file if exist
+        if($request->hasFile('file')){
+            $path = $request->file('file')->store('tickets');
+            $input['file'] = Storage::url($path);
+            // delete old file if exist
+            $filename = basename($ticket->file);
+            $exists = Storage::exists('tickets/'.$filename);
+            if($exists)
+            {
+                // delete the old file
+                Storage::delete('tickets/'.$filename);
+            }
+        }
+        else
+         {  // conserver la même file
+             $input['file'] = $ticket->file;
+         }
+        // reset send_to_fournisseur
+        $input['send_to_fournisseur'] = false;
+        // reset priorite
+        $input['priorite'] =  $input['priorite'];
+        // nouvelle_anomalie
+        $input['nouvelle_anomalie'] =  $input['nouvelle_anomalie'];
+        // ticket_status
+        $input['ticket_status'] =  $input['ticket_status'];
+
+        // update the relanced attribute
+        $ticket_data['ticket_isRelanced'] = true;
+        $oldTicket = $this->ticketRepository->update($ticket_data, $id);
+
+        // ajouter une nouvelle ticket
+        $ticket = $this->ticketRepository->create($input);
+
+        return $this->sendResponse($ticket->toArray(), 'Ticket relancé avec succès.');
     }
 }

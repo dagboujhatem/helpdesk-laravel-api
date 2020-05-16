@@ -8,6 +8,7 @@ use App\TicketResponse;
 use App\Repositories\TicketResponseRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
+use Illuminate\Support\Facades\Storage;
 use Response;
 
 /**
@@ -113,10 +114,16 @@ class TicketResponseAPIController extends AppBaseController
     {
         $input = $request->all();
 
+        // upload file
+        if($request->hasFile('file')){
+            $path = $request->file('file')->store('tickets-response');
+            $input['file'] = Storage::url($path);
+        }
+
         $ticketResponse = $this->ticketResponseRepository->create($input);
 
         return $this->sendResponse($ticketResponse->toArray(),
-            'Réponse envoyée avec succès');
+            'Réponse ajouté avec succès.');
     }
 
     /**

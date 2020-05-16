@@ -30,6 +30,12 @@ class CreateTicketsTable extends Migration
             $table->string('description');
             $table->string('file');
             $table->string('priorite')->nullable();
+            $table->boolean('send_to_fournisseur')->default(false);
+            $table->string('nouvelle_anomalie')->nullable();
+            // l'etat de ticket est ce que relancer ou bien nouvelle ticket
+            $table->boolean('ticket_status')->default(false);
+            // ce champ est true si cette ticket est relancé
+            $table->boolean('ticket_isRelanced')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

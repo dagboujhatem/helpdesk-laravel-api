@@ -52,7 +52,7 @@ Route::group(['middleware' => 'auth:api'], function()
     Route::put('tickets/priorite/{id}', 'TicketAPIController@priorite');
     // reponse à un ticket
     Route::apiResource('ticketResponses', 'TicketResponseAPIController', [
-        'except' => ['destroy']
+        'only' => ['store', 'show']
     ]);
     // avis sur un ticket
     Route::apiResource('ticketAvis', 'TicketAvisAPIController', [

@@ -93,7 +93,8 @@ class TicketResponseAPIController extends AppBaseController
         // update etat en
         $dateToday = new Carbon();
         $date_echeance = Carbon::parse($ticket->date_d_echeance)->format('Y-m-d H:m');
-        if ($dateToday > $date_echeance)
+        $dateEcheance = new Carbon($date_echeance);
+        if ($dateToday->gt($dateEcheance))
         {  // update l'etat en retard
             $ticket = $this->ticketRepository->update(['etat'=> 'En retard'], $input['ticket_id']);
         } else {

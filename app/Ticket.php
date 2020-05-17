@@ -125,6 +125,7 @@ class Ticket extends Model
         'nouvelle_anomalie',
         'ticket_status',
         'ticket_isRelanced',
+        'user_id',
     ];
 
     /**
@@ -149,6 +150,7 @@ class Ticket extends Model
         'nouvelle_anomalie' => 'string',
         'ticket_status' => 'boolean',
         'ticket_isRelanced' => 'boolean',
+        'user_id' => 'integer',
     ];
 
     /**

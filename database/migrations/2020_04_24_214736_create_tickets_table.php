@@ -36,6 +36,12 @@ class CreateTicketsTable extends Migration
             $table->boolean('ticket_status')->default(false);
             // ce champ est true si cette ticket est relancé
             $table->boolean('ticket_isRelanced')->default(false);
+            // ticket created by
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')
+                ->references('id')->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

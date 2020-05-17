@@ -9,6 +9,7 @@ use App\Ticket;
 use App\Repositories\TicketRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Response;
 
@@ -62,11 +63,41 @@ class TicketAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $tickets = $this->ticketRepository->all(
-            $request->except(['skip', 'limit']),
-            $request->get('skip'),
-            $request->get('limit')
-        );
+        // get the authentification user
+        $user = Auth::user();
+        // get the role of authentificated user
+        $role = $user->getRoleNames()->first();
+        // declaration des tickets
+        $tickets = [];
+        // get ticket by role
+        if ($role == 'Administrateur')
+        {
+            $tickets = $this->ticketRepository->all(
+                $request->except(['skip', 'limit']),
+                $request->get('skip'),
+                $request->get('limit')
+            );
+        }
+        if ($role == 'Personnel')
+        {
+            $tickets = $this->ticketRepository->findWhere([
+                'user_id' => $user->id
+            ]);
+        }
+        if ($role == 'Informaticien')
+        {
+            $tickets = $this->ticketRepository->findWhere([
+                'send_to_fournisseur' => false,
+                ['priorite','!=', NULL]
+            ]);
+        }
+        if ($role == 'Fournisseur')
+        {
+            $tickets = $this->ticketRepository->findWhere([
+                'send_to_fournisseur' => true,
+                ['priorite','!=', NULL]
+            ]);
+        }
 
         // pour chacune des tickets
         foreach ($tickets as $ticket) {
@@ -77,6 +108,13 @@ class TicketAPIController extends AppBaseController
             // recuperer la réponse de chaque ticket
             $response = $ticket->reponse;
             $ticket['hasResponse'] = $response != null;
+
+            // enabled edit
+            $ticket['editable'] = $ticket->user_id == $user->id;
+            // enabled avis
+            $ticket['enable_avis'] = $ticket->user_id == $user->id;
+            // enabled relancer
+            $ticket['enable_relancer'] = $ticket->user_id == $user->id;
         }
 
         return $this->sendResponse($tickets->toArray(), 'Tickets récupérées avec succès.');
@@ -124,6 +162,10 @@ class TicketAPIController extends AppBaseController
     public function store(CreateTicketAPIRequest $request)
     {
         $input = $request->all();
+        // added created by user
+        // get the authentification user
+        $user = Auth::user();
+        $input['user_id'] = $user->id;
 
         // upload file
         if($request->hasFile('file')){

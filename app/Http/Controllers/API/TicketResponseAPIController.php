@@ -4,8 +4,11 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Requests\API\CreateTicketResponseAPIRequest;
 use App\Http\Requests\API\UpdateTicketResponseAPIRequest;
+use App\Repositories\TicketRepository;
+use App\Ticket;
 use App\TicketResponse;
 use App\Repositories\TicketResponseRepository;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Support\Facades\Storage;
@@ -20,10 +23,13 @@ class TicketResponseAPIController extends AppBaseController
 {
     /** @var  TicketResponseRepository */
     private $ticketResponseRepository;
+    /** @var  TicketRepository */
+    private $ticketRepository;
 
-    public function __construct(TicketResponseRepository $ticketResponseRepo)
+    public function __construct(TicketResponseRepository $ticketResponseRepo, TicketRepository $ticketRepo)
     {
         $this->ticketResponseRepository = $ticketResponseRepo;
+        $this->ticketRepository = $ticketRepo;
     }
 
     /**
@@ -76,6 +82,24 @@ class TicketResponseAPIController extends AppBaseController
         }
 
         $ticketResponse = $this->ticketResponseRepository->create($input);
+
+        // update ticket
+        /** @var Ticket $ticket */
+        $ticket = $this->ticketRepository->find($input['ticket_id']);
+        if (empty($ticket)) {
+            return $this->sendError('Ticket introuvable.');
+        }
+
+        // update etat en
+        $dateToday = new Carbon();
+        $date_echeance = Carbon::parse($ticket->date_d_echeance)->format('Y-m-d H:m');
+        if ($dateToday > $date_echeance)
+        {  // update l'etat en retard
+            $ticket = $this->ticketRepository->update(['etat'=> 'En retard'], $input['ticket_id']);
+        } else {
+            // update l'etat en Clos
+            $ticket = $this->ticketRepository->update(['etat'=> 'Clos'], $input['ticket_id']);
+        }
 
         return $this->sendResponse($ticketResponse->toArray(),
             'Réponse ajouté avec succès.');

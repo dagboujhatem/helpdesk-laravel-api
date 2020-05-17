@@ -87,7 +87,6 @@ class TicketAPIController extends AppBaseController
         if ($role == 'Informaticien')
         {
             $tickets = $this->ticketRepository->findWhere([
-                'send_to_fournisseur' => false,
                 ['priorite','!=', NULL]
             ]);
         }

@@ -1391,43 +1391,6 @@
             }
         },
         "/ticketResponses": {
-            "get": {
-                "tags": [
-                    "TicketResponse"
-                ],
-                "summary": "Get a listing of the TicketResponses.",
-                "description": "Get all TicketResponses",
-                "produces": [
-                    "application/json"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "properties": {
-                                "success": {
-                                    "type": "boolean"
-                                },
-                                "data": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/definitions/TicketResponse"
-                                    }
-                                },
-                                "message": {
-                                    "type": "string"
-                                }
-                            },
-                            "type": "object"
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ]
-            },
             "post": {
                 "tags": [
                     "TicketResponse"
@@ -1491,58 +1454,6 @@
                         "description": "id of TicketResponse",
                         "required": true,
                         "type": "integer"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "properties": {
-                                "success": {
-                                    "type": "boolean"
-                                },
-                                "data": {
-                                    "$ref": "#/definitions/TicketResponse"
-                                },
-                                "message": {
-                                    "type": "string"
-                                }
-                            },
-                            "type": "object"
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ]
-            },
-            "put": {
-                "tags": [
-                    "TicketResponse"
-                ],
-                "summary": "Update the specified TicketResponse in storage",
-                "description": "Update TicketResponse",
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "id of TicketResponse",
-                        "required": true,
-                        "type": "integer"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "description": "TicketResponse that should be updated",
-                        "required": false,
-                        "schema": {
-                            "$ref": "#/definitions/TicketResponse"
-                        }
                     }
                 ],
                 "responses": {
@@ -2006,7 +1917,8 @@
                 "lieu",
                 "description",
                 "photo",
-                "priorite"
+                "priorite",
+                "send_to_fournisseur"
             ],
             "properties": {
                 "id": {
@@ -2061,6 +1973,10 @@
                 "priorite": {
                     "description": "priorite",
                     "type": "string"
+                },
+                "send_to_fournisseur": {
+                    "description": "send_to_fournisseur",
+                    "type": "boolean"
                 },
                 "created_at": {
                     "description": "created_at",
